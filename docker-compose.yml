@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  receptionbook.api:
+    image: ${DOCKER_REGISTRY-}receptionbookapi
+    build:
+      context: .
+      dockerfile: ReceptionBook.API/Dockerfile
+
+  receptionbook.db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: receptionbook
+      POSTGRES_PASSWORD: receptionbook
+      POSTGRES_DB: receptionbook
+    ports:
+      - "5432:5432"
+    volumes:
+      - receptionbook.db-data:/var/lib/postgresql/data
+
+volumes:
+  receptionbook.db-data:
