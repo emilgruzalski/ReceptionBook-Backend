@@ -1,10 +1,14 @@
 using Microsoft.AspNetCore.HttpOverrides;
+using NLog;
 using ReceptionBook.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
+builder.Services.ConfigureLoggerService();
 
 // Add services to the container.
 
@@ -27,6 +31,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
@@ -35,8 +41,6 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });
 
 app.UseCors("CorsPolicy");
-
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
