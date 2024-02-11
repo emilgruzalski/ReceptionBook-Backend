@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using ReceptionBook.Contracts;
 using ReceptionBook.Service.Contracts;
 
@@ -15,12 +16,12 @@ namespace ReceptionBook.Service
         private readonly Lazy<IMaintenanceService> _maintenanceService;
         private readonly Lazy<IRoomService> _roomService;
 
-        public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager logger)
+        public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager logger, IMapper mapper)
         {
-            _customerService = new Lazy<ICustomerService>(() => new CustomerService(repositoryManager, logger));
-            _reservationService = new Lazy<IReservationService>(() => new ReservationService(repositoryManager, logger));
-            _maintenanceService = new Lazy<IMaintenanceService>(() => new MaintenanceService(repositoryManager, logger));
-            _roomService = new Lazy<IRoomService>(() => new RoomService(repositoryManager, logger));
+            _customerService = new Lazy<ICustomerService>(() => new CustomerService(repositoryManager, logger, mapper));
+            _reservationService = new Lazy<IReservationService>(() => new ReservationService(repositoryManager, logger, mapper));
+            _maintenanceService = new Lazy<IMaintenanceService>(() => new MaintenanceService(repositoryManager, logger, mapper));
+            _roomService = new Lazy<IRoomService>(() => new RoomService(repositoryManager, logger, mapper));
         }
 
         public ICustomerService CustomerService => _customerService.Value;

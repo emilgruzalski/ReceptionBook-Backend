@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ReceptionBook.Shared\ReceptionBook.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
