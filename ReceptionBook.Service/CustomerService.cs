@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using ReceptionBook.Contracts;
 using ReceptionBook.Service.Contracts;
 
@@ -12,11 +13,13 @@ namespace ReceptionBook.Service
     {
         private readonly IRepositoryManager _repository;
         private readonly ILoggerManager _logger;
+        private readonly IMapper _mapper;
 
-        public CustomerService(IRepositoryManager repository, ILoggerManager logger)
+        public CustomerService(IRepositoryManager repository, ILoggerManager logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
     }
 }

@@ -14,5 +14,10 @@ namespace ReceptionBook.Repository
             : base(repositoryContext)
         {
         }
+
+        public IEnumerable<Room> GetAllRooms(bool trackChanges) =>
+            FindAll(trackChanges)
+                .OrderBy(c => c.Number)
+                .ToList();
     }
 }

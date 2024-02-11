@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ReceptionBook.LoggerService\ReceptionBook.LoggerService.csproj" />
+    <ProjectReference Include="..\ReceptionBook.Presentation\ReceptionBook.Presentation.csproj" />
     <ProjectReference Include="..\ReceptionBook.Repository\ReceptionBook.Repository.csproj" />
     <ProjectReference Include="..\ReceptionBook.Service\ReceptionBook.Service.csproj" />
   </ItemGroup>
