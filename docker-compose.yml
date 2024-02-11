@@ -6,18 +6,20 @@ services:
     build:
       context: .
       dockerfile: ReceptionBook.API/Dockerfile
+    depends_on:
+      - receptionbook.db
 
   receptionbook.db:
-    image: postgres:16
+    image: mcr.microsoft.com/mssql/server:2022-latest
     restart: always
     environment:
-      POSTGRES_USER: receptionbook
-      POSTGRES_PASSWORD: receptionbook
-      POSTGRES_DB: receptionbook
+      ACCEPT_EULA: Y
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      MSSQL_PID: "Express"
     ports:
-      - "5432:5432"
+      - "1433:1433"
     volumes:
-      - receptionbook.db-data:/var/lib/postgresql/data
+      - receptionbook.db-data:/var/opt/mssql
 
 volumes:
   receptionbook.db-data:

@@ -1,5 +1,9 @@
-﻿using ReceptionBook.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using ReceptionBook.Contracts;
 using ReceptionBook.LoggerService;
+using ReceptionBook.Repository;
+using ReceptionBook.Service;
+using ReceptionBook.Service.Contracts;
 
 namespace ReceptionBook.API.Extensions
 {
@@ -21,5 +25,16 @@ namespace ReceptionBook.API.Extensions
 
         public static void ConfigureLoggerService(this IServiceCollection services) =>
             services.AddSingleton<ILoggerManager, LoggerManager>();
+
+        public static void ConfigureRepositoryManager(this IServiceCollection services) =>
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+        public static void ConfigureServiceManager(this IServiceCollection services) =>
+            services.AddScoped<IServiceManager, ServiceManager>();
+
+        public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>
+            services.AddDbContext<RepositoryContext>(opts =>
+                opts.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
+
     }
 }
