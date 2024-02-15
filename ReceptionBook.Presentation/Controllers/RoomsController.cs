@@ -14,16 +14,10 @@ namespace ReceptionBook.Presentation.Controllers
         [HttpGet]
         public IActionResult GetRooms()
         {
-            try
-            {
-                var rooms = _service.RoomService.GetAllRooms(trackChanges: false);
+            throw new Exception("Exception");
+            var rooms = _service.RoomService.GetAllRooms(trackChanges: false);
 
-                return Ok(rooms);
-            }
-            catch
-            {
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(rooms);
         }
     }
 }
