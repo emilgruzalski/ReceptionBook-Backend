@@ -20,19 +20,11 @@ namespace ReceptionBook.Service
 
         public IEnumerable<RoomDto> GetAllRooms(bool trackChanges)
         {
-            try
-            {
-                var rooms = _repository.Room.GetAllRooms(trackChanges);
+            var rooms = _repository.Room.GetAllRooms(trackChanges);
 
-                var roomsDto = _mapper.Map<IEnumerable<RoomDto>>(rooms);
+            var roomsDto = _mapper.Map<IEnumerable<RoomDto>>(rooms);
 
-                return roomsDto;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong in the {nameof(GetAllRooms)} service method {ex}");
-                throw;
-            }
+            return roomsDto;
         }
     }
 }
