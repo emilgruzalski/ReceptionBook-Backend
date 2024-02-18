@@ -17,7 +17,11 @@ namespace ReceptionBook.Repository
 
         public IEnumerable<Room> GetAllRooms(bool trackChanges) =>
             FindAll(trackChanges)
-                .OrderBy(c => c.Number)
+                .OrderBy(r => r.Number)
                 .ToList();
+        
+        public Room GetRoom(Guid roomId, bool trackChanges) =>
+            FindByCondition(r => r.Id.Equals(roomId), trackChanges)
+            .SingleOrDefault();
     }
 }

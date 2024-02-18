@@ -10,5 +10,6 @@ namespace ReceptionBook.Contracts
     public interface IRoomRepository
     {
         IEnumerable<Room> GetAllRooms(bool trackChanges);
+        Room GetRoom(Guid roomId, bool trackChanges);
     }
 }

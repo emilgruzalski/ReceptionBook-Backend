@@ -14,5 +14,14 @@ namespace ReceptionBook.Repository
             : base(repositoryContext)
         {
         }
+        
+        public IEnumerable<Maintenance> GetMaintenances(Guid roomId, bool trackChanges) =>
+            FindByCondition(m => m.RoomId.Equals(roomId), trackChanges)
+                .OrderBy(m => m.StartDate)
+                .ToList();
+        
+        public Maintenance GetMaintenance(Guid roomId, Guid Id, bool trackChanges) =>
+            FindByCondition(m => m.RoomId.Equals(roomId) && m.Id.Equals(Id), trackChanges)
+                .SingleOrDefault();
     }
 }

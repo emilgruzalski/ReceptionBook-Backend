@@ -13,9 +13,5 @@
   <ItemGroup>
     <ProjectReference Include="..\ReceptionBook.Service.Contracts\ReceptionBook.Service.Contracts.csproj" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
 
 </Project>

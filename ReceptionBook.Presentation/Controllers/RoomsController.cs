@@ -14,10 +14,17 @@ namespace ReceptionBook.Presentation.Controllers
         [HttpGet]
         public IActionResult GetRooms()
         {
-            throw new Exception("Exception");
             var rooms = _service.RoomService.GetAllRooms(trackChanges: false);
 
             return Ok(rooms);
+        }
+        
+        [HttpGet("{id:guid}")]
+        public IActionResult GetRoom(Guid id)
+        {
+            var room = _service.RoomService.GetRoom(id, trackChanges: false);
+            
+            return Ok(room);
         }
     }
 }
