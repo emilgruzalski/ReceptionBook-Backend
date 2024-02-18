@@ -9,6 +9,8 @@ namespace ReceptionBook.API
         public MappingProfile()
         {
             CreateMap<Room, RoomDto>();
+            
+            CreateMap<Maintenance, MaintenanceDto>();
         }
     }
 }

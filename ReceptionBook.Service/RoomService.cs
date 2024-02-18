@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ReceptionBook.Contracts;
+using ReceptionBook.Entities.Exceptions;
 using ReceptionBook.Service.Contracts;
 using ReceptionBook.Shared.DataTransferObjects;
 
@@ -25,6 +26,16 @@ namespace ReceptionBook.Service
             var roomsDto = _mapper.Map<IEnumerable<RoomDto>>(rooms);
 
             return roomsDto;
+        }
+        
+        public RoomDto GetRoom(Guid id, bool trackChanges)
+        {
+            var room = _repository.Room.GetRoom(id, trackChanges);
+            if (room is null)
+                throw new RoomNotFoundException(id);
+            
+            var roomDto = _mapper.Map<RoomDto>(room);
+            return roomDto;
         }
     }
 }
