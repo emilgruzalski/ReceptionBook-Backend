@@ -363,5 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # NLog
-ReceptionBook.API/logs
-ReceptionBook.API/internal_logs
+ReceptionBook/logs
+ReceptionBook/internal_logs
