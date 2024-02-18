@@ -3,25 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceptionBook.API", "ReceptionBook.API\ReceptionBook.API.csproj", "{576B7221-ED4A-4377-85DF-99252544482A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceptionBook", "ReceptionBook\ReceptionBook.csproj", "{576B7221-ED4A-4377-85DF-99252544482A}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AEF45090-74CC-410F-AF2F-2737DE6C840C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceptionBook.Contracts", "ReceptionBook.Contracts\ReceptionBook.Contracts.csproj", "{A3C47105-F73D-4B5C-95B4-7C7FC78DCBEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{A3C47105-F73D-4B5C-95B4-7C7FC78DCBEC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceptionBook.LoggerService", "ReceptionBook.LoggerService\ReceptionBook.LoggerService.csproj", "{20A089C7-E7BC-464E-8BC7-E82096D345CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerService", "LoggerService\LoggerService.csproj", "{20A089C7-E7BC-464E-8BC7-E82096D345CC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceptionBook.Entities", "ReceptionBook.Entities\ReceptionBook.Entities.csproj", "{9A6A2C1C-ED49-4C72-B0C8-30E06D777A79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{9A6A2C1C-ED49-4C72-B0C8-30E06D777A79}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceptionBook.Repository", "ReceptionBook.Repository\ReceptionBook.Repository.csproj", "{4AA6FA95-4525-4993-98E7-FFB95FDDF187}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{4AA6FA95-4525-4993-98E7-FFB95FDDF187}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceptionBook.Service.Contracts", "ReceptionBook.Service.Contracts\ReceptionBook.Service.Contracts.csproj", "{6BCCA978-1F79-42EB-8D64-FCE7EC66C72B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Contracts", "Service.Contracts\Service.Contracts.csproj", "{6BCCA978-1F79-42EB-8D64-FCE7EC66C72B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceptionBook.Service", "ReceptionBook.Service\ReceptionBook.Service.csproj", "{24D9AEF2-BF4D-49F3-83E2-975651A62DA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{24D9AEF2-BF4D-49F3-83E2-975651A62DA3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReceptionBook.Presentation", "ReceptionBook.Presentation\ReceptionBook.Presentation.csproj", "{6B600A28-22E5-4595-8D71-301551CA359D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReceptionBook.Shared", "ReceptionBook.Shared\ReceptionBook.Shared.csproj", "{B8FEF864-1C52-429B-92A1-A0C6D6B715E9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{B8FEF864-1C52-429B-92A1-A0C6D6B715E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

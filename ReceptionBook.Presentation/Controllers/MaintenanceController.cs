@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ReceptionBook.Service.Contracts;
+using Service.Contracts;
 
 namespace ReceptionBook.Presentation.Controllers;
 

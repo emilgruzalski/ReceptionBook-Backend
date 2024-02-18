@@ -1,11 +1,11 @@
 version: '3.4'
 
 services:
-  receptionbook.api:
-    image: ${DOCKER_REGISTRY-}receptionbookapi
+  receptionbook:
+    image: ${DOCKER_REGISTRY-}receptionbook
     build:
       context: .
-      dockerfile: ReceptionBook.API/Dockerfile
+      dockerfile: ReceptionBook/Dockerfile
     depends_on:
       - receptionbook.db
 
