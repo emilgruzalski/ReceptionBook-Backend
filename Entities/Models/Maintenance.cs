@@ -20,7 +20,8 @@ namespace Entities.Models
 
         [Required(ErrorMessage = "Maintenance description is a required field.")]
         public string? Description { get; set; }
-
+        
+        [Required(ErrorMessage = "Maintenance cost is a required field.")]
         public decimal? Cost { get; set; }
 
         [Required(ErrorMessage = "Maintenance room id is a required field.")]

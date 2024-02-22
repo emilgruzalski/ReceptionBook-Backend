@@ -26,6 +26,7 @@ namespace Entities.Models
         [Required(ErrorMessage = "Reservation total price is a required field.")]
         public decimal TotalPrice { get; set; }
 
+        [Required(ErrorMessage = "Reservation customer id is a required field.")]
         [ForeignKey(nameof(Customer))]
         public Guid? CustomerId { get; set; }
         public Customer? Customer { get; set; }
