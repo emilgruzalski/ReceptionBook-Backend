@@ -20,7 +20,7 @@ namespace Repository.Configuration
                     Id = new Guid("856ebb5e-fa0e-48c7-8d4d-6605e304efaa"),
                     StartDate = new DateTime(2024, 2, 16),
                     EndDate = new DateTime(2024, 2, 18),
-                    CustomerId = null,
+                    CustomerId = new Guid("4b6693b4-f8bc-41b7-b7b8-4ef5b806335a"),
                     RoomId = new Guid("a48e654e-7e13-4a3a-83c8-18f179dd9eea"),
                     Status = "Pending",
                     TotalPrice = 200

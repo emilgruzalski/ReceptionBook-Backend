@@ -30,7 +30,7 @@ namespace Repository.Configuration
                     StartDate = new DateTime(2024, 2, 1),
                     EndDate = null,
                     Description = "Broken window",
-                    Cost = null,
+                    Cost = 250,
                     RoomId = new Guid("9fbbb0c1-a6bb-433c-9520-5a45592f0084")
                 }
             );
