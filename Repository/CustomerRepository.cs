@@ -14,5 +14,14 @@ namespace Repository
             : base(repositoryContext)
         {
         }
+        
+        public IEnumerable<Customer> GetAllCustomers(bool trackChanges) =>
+            FindAll(trackChanges)
+                .OrderBy(c => c.FirstName)
+                .ToList();
+        
+        public Customer GetCustomer(Guid customerId, bool trackChanges) =>
+            FindByCondition(c => c.Id.Equals(customerId), trackChanges)
+                .SingleOrDefault();
     }
 }
