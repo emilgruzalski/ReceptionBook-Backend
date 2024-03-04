@@ -11,12 +11,26 @@ namespace ReceptionBook
             CreateMap<Room, RoomDto>();
             
             CreateMap<Maintenance, MaintenanceDto>();
-            
+
             CreateMap<Reservation, ReservationDto>()
-                .ForMember(r => r.RoomNumber, opt => opt.MapFrom(x => x.Room.Number))
-                .ForMember(r => r.CustomerName, opt => opt.MapFrom(x => string.Join(' ', x.Customer.FirstName, x.Customer.LastName)));
+                .ConstructUsing(r => new ReservationDto(
+                    r.Id,
+                    r.StartDate,
+                    r.EndDate,
+                    r.Status,
+                    r.TotalPrice,
+                    $"{r.Customer.FirstName} {r.Customer.LastName}",
+                    r.Room.Number));
+            
             CreateMap<Reservation, ReservationForRoomDto>()
-                .ForMember(r => r.CustomerName, opt => opt.MapFrom(x => string.Join(' ', x.Customer.FirstName, x.Customer.LastName)));
+                .ConstructUsing(r => new ReservationForRoomDto(
+                    r.Id,
+                    r.StartDate,
+                    r.EndDate,
+                    $"{r.Customer.FirstName} {r.Customer.LastName}",
+                    r.Status,
+                    r.TotalPrice));
+            
             CreateMap<Reservation, ReservationForCustomerDto>()
                 .ForMember(r => r.RoomNumber, opt => opt.MapFrom(x => x.Room.Number));
             
