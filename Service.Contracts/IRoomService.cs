@@ -11,5 +11,6 @@ namespace Service.Contracts
         IEnumerable<RoomDto> GetAvailableRooms(AvailableRoomsDto room, bool trackChanges);
         (IEnumerable<RoomDto> rooms, string ids) CreateRoomCollection(IEnumerable<RoomForCreationDto> roomCollection);
         void DeleteRoom(Guid roomId, bool trackChanges);
+        void UpdateRoom(Guid roomId, RoomForUpdateDto room, bool trackChanges);
     }
 }

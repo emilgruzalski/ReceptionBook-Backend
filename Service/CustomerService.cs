@@ -89,5 +89,15 @@ namespace Service
             _repository.Customer.DeleteCustomer(customer);
             _repository.Save();
         }
+
+        public void UpdateCustomer(Guid customerId, CustomerForUpdateDto customer, bool trackChanges)
+        {
+            var customerEntity = _repository.Customer.GetCustomer(customerId, trackChanges);
+            if (customerEntity is null)
+                throw new CustomerNotFoundException(customerId);
+
+            _mapper.Map(customer, customerEntity);
+            _repository.Save();
+        }
     }
 }

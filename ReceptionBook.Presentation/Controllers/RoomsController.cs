@@ -71,5 +71,16 @@ namespace ReceptionBook.Presentation.Controllers
             
             return NoContent();
         }
+        
+        [HttpPut("{id:guid}")]
+        public IActionResult UpdateRoom(Guid id, [FromBody] RoomForUpdateDto room)
+        {
+            if (room is null)
+                return BadRequest("RoomForUpdateDto object is null");
+            
+            _service.RoomService.UpdateRoom(id, room, trackChanges: true);
+            
+            return NoContent();
+        }
     }
 }

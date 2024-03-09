@@ -40,17 +40,17 @@ namespace Service
             return _mapper.Map<ReservationDto>(reservation);
         }
         
-        public IEnumerable<ReservationForRoomDto> GetReservationsForRoom(Guid roomId, bool trackChanges)
+        public IEnumerable<ReservationDto> GetReservationsForRoom(Guid roomId, bool trackChanges)
         {
             var room = _repository.Room.GetRoom(roomId, trackChanges);
             if (room is null)
                 throw new RoomNotFoundException(roomId);
             
             var reservations = _repository.Reservation.GetReservationsForRoom(roomId, trackChanges);
-            return _mapper.Map<IEnumerable<ReservationForRoomDto>>(reservations);
+            return _mapper.Map<IEnumerable<ReservationDto>>(reservations);
         }
         
-        public ReservationForRoomDto GetReservationForRoom(Guid roomId, Guid reservationId, bool trackChanges)
+        public ReservationDto GetReservationForRoom(Guid roomId, Guid reservationId, bool trackChanges)
         {
             var room = _repository.Room.GetRoom(roomId, trackChanges);
             if (room is null)
@@ -60,20 +60,20 @@ namespace Service
             if (reservation is null)
                 throw new ReservationNotFoundException(reservationId);
             
-            return _mapper.Map<ReservationForRoomDto>(reservation);
+            return _mapper.Map<ReservationDto>(reservation);
         }
         
-        public IEnumerable<ReservationForCustomerDto> GetReservationsForCustomer(Guid customerId, bool trackChanges)
+        public IEnumerable<ReservationDto> GetReservationsForCustomer(Guid customerId, bool trackChanges)
         {
             var customer = _repository.Customer.GetCustomer(customerId, trackChanges);
             if (customer is null)
                 throw new CustomerNotFoundException(customerId);
             
             var reservations = _repository.Reservation.GetReservationsForCustomer(customerId, trackChanges);
-            return _mapper.Map<IEnumerable<ReservationForCustomerDto>>(reservations);
+            return _mapper.Map<IEnumerable<ReservationDto>>(reservations);
         }
         
-        public ReservationForCustomerDto GetReservationForCustomer(Guid customerId, Guid reservationId, bool trackChanges)
+        public ReservationDto GetReservationForCustomer(Guid customerId, Guid reservationId, bool trackChanges)
         {
             var customer = _repository.Customer.GetCustomer(customerId, trackChanges);
             if (customer is null)
@@ -83,7 +83,7 @@ namespace Service
             if (reservation is null)
                 throw new ReservationNotFoundException(reservationId);
             
-            return _mapper.Map<ReservationForCustomerDto>(reservation);
+            return _mapper.Map<ReservationDto>(reservation);
         }
         
         public ReservationDto CreateReservation(ReservationForCreationDto reservation)
@@ -122,6 +122,16 @@ namespace Service
                 throw new ReservationNotFoundException(reservationId);
 
             _repository.Reservation.DeleteReservation(reservation);
+            _repository.Save();
+        }
+        
+        public void UpdateReservation(Guid reservationId, ReservationForUpdateDto reservation, bool trackChanges)
+        {
+            var reservationEntity = _repository.Reservation.GetReservation(reservationId, trackChanges);
+            if (reservationEntity is null)
+                throw new ReservationNotFoundException(reservationId);
+            
+            _mapper.Map(reservation, reservationEntity);
             _repository.Save();
         }
     }

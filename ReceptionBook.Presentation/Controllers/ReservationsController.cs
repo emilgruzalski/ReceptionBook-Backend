@@ -79,4 +79,15 @@ public class ReservationsController : ControllerBase
         
         return NoContent();
     }
+    
+    [HttpPut("reservations/{id:guid}")]
+    public IActionResult UpdateReservation(Guid id, [FromBody] ReservationForUpdateDto reservation)
+    {
+        if (reservation is null)
+            return BadRequest("ReservationForUpdateDto object is null");
+        
+        _service.ReservationService.UpdateReservation(id, reservation, trackChanges: true);
+        
+        return NoContent();
+    }
 }
