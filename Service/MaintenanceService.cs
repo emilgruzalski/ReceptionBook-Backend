@@ -54,9 +54,12 @@ namespace Service
         
         public MaintenanceDto CreateMaintenanceForRoom(Guid roomId, MaintenanceForCreationDto maintenanceForCreation, bool trackChanges)
         {
-            var room = _repository.Room.GetRoom(roomId, trackChanges);
+            var room = _repository.Room.GetRoomWithDetails(roomId, trackChanges);
             if (room is null)
                 throw new RoomNotFoundException(roomId);
+            
+            if (room.Reservations.Any(r => r.StartDate <= maintenanceForCreation.EndDate && r.EndDate >= maintenanceForCreation.StartDate && r.Status != "Canceled"))
+                throw new RoomIsReservedException(roomId);
 
             var maintenanceEntity = _mapper.Map<Maintenance>(maintenanceForCreation);
 
@@ -84,10 +87,13 @@ namespace Service
         
         public void UpdateMaintenanceForRoom(Guid roomId, Guid id, MaintenanceForUpdateDto maintenanceForUpdate, bool roomTrackChanges, bool mainTrackChanges)
         {
-            var room = _repository.Room.GetRoom(roomId, roomTrackChanges);
+            var room = _repository.Room.GetRoomWithDetails(roomId, roomTrackChanges);
             if (room is null)
                 throw new RoomNotFoundException(roomId);
 
+            if (room.Reservations.Any(r => r.StartDate <= maintenanceForUpdate.EndDate && r.EndDate >= maintenanceForUpdate.StartDate && r.Status != "Canceled"))
+                throw new RoomIsReservedException(roomId);
+            
             var maintenanceEntity = _repository.Maintenance.GetMaintenance(roomId, id, mainTrackChanges);
             if (maintenanceEntity is null)
                 throw new MaintenanceNotFoundException(id);

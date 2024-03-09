@@ -17,7 +17,7 @@ namespace Entities.Models
         public string? LastName { get; set; }
 
         [Required(ErrorMessage = "Customer email is a required field.")]
-        [MaxLength(40, ErrorMessage = "Maximum length for the Email is 20 characters.")]
+        [MaxLength(40, ErrorMessage = "Maximum length for the Email is 40 characters.")]
         [EmailAddress(ErrorMessage = "Email is not a valid email address.")]
         public string? Email { get; set; }
 

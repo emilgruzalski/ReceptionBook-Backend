@@ -35,6 +35,9 @@ public class CustomersController : ControllerBase
         if (customer is null)
             return BadRequest("CustomerForCreationDto object is null");
         
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
+        
         var createdCustomer = _service.CustomerService.CreateCustomer(customer);
         
         return CreatedAtRoute("CustomerById", new { id = createdCustomer.Id }, createdCustomer);
@@ -53,6 +56,9 @@ public class CustomersController : ControllerBase
     {
         var result = _service.CustomerService.CreateCustomerCollection(customerCollection);
         
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
+        
         return CreatedAtRoute("CustomerCollection", new { result.ids }, result.customers);
     }
     
@@ -70,8 +76,19 @@ public class CustomersController : ControllerBase
         if (customer is null)
             return BadRequest("CustomerForUpdateDto object is null");
         
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
+        
         _service.CustomerService.UpdateCustomer(id, customer, trackChanges: true);
         
         return NoContent();
+    }
+    
+    [HttpGet("{customerId}/reservations")]
+    public IActionResult GetReservationsForCustomer(Guid customerId)
+    {
+        var reservations = _service.ReservationService.GetReservationsForCustomer(customerId, trackChanges: false);
+        
+        return Ok(reservations);
     }
 }

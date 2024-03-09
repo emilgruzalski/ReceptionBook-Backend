@@ -92,7 +92,7 @@ namespace Service
             if (room is null)
                 throw new RoomNotFoundException(reservation.RoomId);
             
-            if (room.Reservations.Any(r => r.StartDate <= reservation.EndDate && r.EndDate >= reservation.StartDate))
+            if (room.Reservations.Any(r => r.StartDate <= reservation.EndDate && r.EndDate >= reservation.StartDate && r.Status != "Cancelled"))
                 throw new RoomAlreadyReservedException(reservation.RoomId, reservation.StartDate, reservation.EndDate);
             
             if (room.Maintenances.Any(m => m.StartDate <= reservation.EndDate && m.EndDate >= reservation.StartDate))
@@ -130,6 +130,16 @@ namespace Service
             var reservationEntity = _repository.Reservation.GetReservation(reservationId, trackChanges);
             if (reservationEntity is null)
                 throw new ReservationNotFoundException(reservationId);
+            
+            var room = _repository.Room.GetRoomWithDetails(reservation.RoomId, false);
+            if (room is null)
+                throw new RoomNotFoundException(reservation.RoomId);
+            
+            if (room.Reservations.Any(r => r.StartDate <= reservation.EndDate && r.EndDate >= reservation.StartDate && r.Status != "Cancelled" && r.Id != reservationId))
+                throw new RoomAlreadyReservedException(reservation.RoomId, reservation.StartDate, reservation.EndDate);
+            
+            if (room.Maintenances.Any(m => m.StartDate <= reservation.EndDate && m.EndDate >= reservation.StartDate))
+                throw new RoomUnderMaintenanceException(reservation.RoomId, reservation.StartDate, reservation.EndDate);
             
             _mapper.Map(reservation, reservationEntity);
             _repository.Save();

@@ -82,5 +82,13 @@ namespace ReceptionBook.Presentation.Controllers
             
             return NoContent();
         }
+        
+        [HttpGet("{roomId}/reservations")]
+        public IActionResult GetReservationsForRoom(Guid roomId)
+        {
+            var reservations = _service.ReservationService.GetReservationsForRoom(roomId, trackChanges: false);
+        
+            return Ok(reservations);
+        }
     }
 }

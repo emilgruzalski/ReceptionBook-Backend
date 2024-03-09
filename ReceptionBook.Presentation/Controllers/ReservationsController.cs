@@ -4,7 +4,7 @@ using Shared.DataTransferObjects;
 
 namespace ReceptionBook.Presentation.Controllers;
 
-[Route("api")]
+[Route("api/reservations")]
 [ApiController]
 public class ReservationsController : ControllerBase
 {
@@ -12,7 +12,6 @@ public class ReservationsController : ControllerBase
     
     public ReservationsController(IServiceManager service) => _service = service;
     
-    [Route("reservations")]
     [HttpGet]
     public IActionResult GetReservations()
     {
@@ -21,7 +20,7 @@ public class ReservationsController : ControllerBase
         return Ok(reservations);
     }
     
-    [HttpGet("reservations/{id:guid}", Name = "ReservationById")]
+    [HttpGet("{id:guid}", Name = "ReservationById")]
     public IActionResult GetReservation(Guid id)
     {
         var reservation = _service.ReservationService.GetReservation(id, trackChanges: false);
@@ -29,50 +28,21 @@ public class ReservationsController : ControllerBase
         return Ok(reservation);
     }
     
-    [HttpGet("rooms/{roomId}/reservations")]
-    public IActionResult GetReservationsForRoom(Guid roomId)
-    {
-        var reservations = _service.ReservationService.GetReservationsForRoom(roomId, trackChanges: false);
-        
-        return Ok(reservations);
-    }
-    
-    [HttpGet("rooms/{roomId}/reservations/{id:guid}")]
-    public IActionResult GetReservationForRoom(Guid roomId, Guid id)
-    {
-        var reservation = _service.ReservationService.GetReservationForRoom(roomId, id, trackChanges: false);
-        
-        return Ok(reservation);
-    }
-    
-    [HttpGet("customers/{customerId}/reservations")]
-    public IActionResult GetReservationsForCustomer(Guid customerId)
-    {
-        var reservations = _service.ReservationService.GetReservationsForCustomer(customerId, trackChanges: false);
-        
-        return Ok(reservations);
-    }
-    
-    [HttpGet("customers/{customerId}/reservations/{id:guid}")]
-    public IActionResult GetReservationForCustomer(Guid customerId, Guid id)
-    {
-        var reservation = _service.ReservationService.GetReservationForCustomer(customerId, id, trackChanges: false);
-        
-        return Ok(reservation);
-    }
-    
-    [HttpPost("reservations")]
+    [HttpPost]
     public IActionResult CreateReservation([FromBody] ReservationForCreationDto reservation)
     {
         if (reservation is null)
             return BadRequest("ReservationForCreationDto object is null");
+        
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
         
         var createdReservation = _service.ReservationService.CreateReservation(reservation);
         
         return CreatedAtRoute("ReservationById", new { id = createdReservation.Id }, createdReservation);
     }
     
-    [HttpDelete("reservations/{id:guid}")]
+    [HttpDelete("{id:guid}")]
     public IActionResult DeleteReservation(Guid id)
     {
         _service.ReservationService.DeleteReservation(id, trackChanges: false);
@@ -80,11 +50,14 @@ public class ReservationsController : ControllerBase
         return NoContent();
     }
     
-    [HttpPut("reservations/{id:guid}")]
+    [HttpPut("{id:guid}")]
     public IActionResult UpdateReservation(Guid id, [FromBody] ReservationForUpdateDto reservation)
     {
         if (reservation is null)
             return BadRequest("ReservationForUpdateDto object is null");
+        
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
         
         _service.ReservationService.UpdateReservation(id, reservation, trackChanges: true);
         
