@@ -34,6 +34,9 @@ public class MaintenanceController : ControllerBase
         if (maintenance is null)
             return BadRequest("MaintenanceForCreationDto object is null");
         
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
+        
         var maintenanceToReturn = _service.MaintenanceService.CreateMaintenanceForRoom(roomId, maintenance, trackChanges: false);
         
         return CreatedAtRoute("GetMaintenanceForRoom", new { roomId, id = maintenanceToReturn.Id },
@@ -53,6 +56,9 @@ public class MaintenanceController : ControllerBase
     {
         if (maintenance is null)
             return BadRequest("MaintenanceForUpdateDto object is null");
+        
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
         
         _service.MaintenanceService.UpdateMaintenanceForRoom(roomId, id, maintenance, roomTrackChanges: false, mainTrackChanges: true);
         
