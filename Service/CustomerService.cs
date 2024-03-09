@@ -79,5 +79,15 @@ namespace Service
             
             return (customers: customerCollectionToReturn, ids: ids);
         }
+        
+        public void DeleteCustomer(Guid customerId, bool trackChanges)
+        {
+            var customer = _repository.Customer.GetCustomer(customerId, trackChanges);
+            if (customer is null)
+                throw new CustomerNotFoundException(customerId);
+            
+            _repository.Customer.DeleteCustomer(customer);
+            _repository.Save();
+        }
     }
 }

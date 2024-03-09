@@ -52,5 +52,7 @@ namespace Repository
                 .SingleOrDefault();
         
         public void CreateReservation(Reservation reservation) => Create(reservation);
+        
+        public void DeleteReservation(Reservation reservation) => Delete(reservation);
     }
 }

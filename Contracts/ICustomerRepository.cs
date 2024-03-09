@@ -13,5 +13,6 @@ namespace Contracts
         Customer GetCustomer(Guid customerId, bool trackChanges);
         void CreateCustomer(Customer customer);
         IEnumerable<Customer> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
+        void DeleteCustomer(Customer customer);
     }
 }

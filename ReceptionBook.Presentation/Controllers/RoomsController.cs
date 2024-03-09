@@ -63,5 +63,13 @@ namespace ReceptionBook.Presentation.Controllers
             
             return CreatedAtRoute("RoomCollection", new { result.ids }, result.rooms);
         }
+        
+        [HttpDelete("{id:guid}")]
+        public IActionResult DeleteRoom(Guid id)
+        {
+            _service.RoomService.DeleteRoom(id, trackChanges: false);
+            
+            return NoContent();
+        }
     }
 }

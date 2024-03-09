@@ -29,5 +29,7 @@ namespace Repository
         public IEnumerable<Customer> GetByIds(IEnumerable<Guid> ids, bool trackChanges) =>
             FindByCondition(x => ids.Contains(x.Id), trackChanges)
                 .ToList();
+        
+        public void DeleteCustomer(Customer customer) => Delete(customer);
     }
 }

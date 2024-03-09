@@ -55,4 +55,12 @@ public class CustomersController : ControllerBase
         
         return CreatedAtRoute("CustomerCollection", new { result.ids }, result.customers);
     }
+    
+    [HttpDelete("{id:guid}")]
+    public IActionResult DeleteCustomer(Guid id)
+    {
+        _service.CustomerService.DeleteCustomer(id, trackChanges: false);
+        
+        return NoContent();
+    }
 }

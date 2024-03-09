@@ -114,5 +114,15 @@ namespace Service
             
             return reservationToReturn;
         }
+
+        public void DeleteReservation(Guid reservationId, bool trackChanges)
+        {
+            var reservation = _repository.Reservation.GetReservation(reservationId, trackChanges);
+            if (reservation is null)
+                throw new ReservationNotFoundException(reservationId);
+
+            _repository.Reservation.DeleteReservation(reservation);
+            _repository.Save();
+        }
     }
 }

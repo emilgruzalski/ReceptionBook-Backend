@@ -15,5 +15,6 @@ namespace Contracts
         IEnumerable<Room> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
         IEnumerable<Room> GetAvailableRooms(DateTime startDate, DateTime endDate, bool trackChanges);
         Room GetRoomWithDetails(Guid roomId, bool trackChanges);
+        void DeleteRoom(Room room);
     }
 }

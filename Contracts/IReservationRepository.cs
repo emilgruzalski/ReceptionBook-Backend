@@ -16,5 +16,6 @@ namespace Contracts
         IEnumerable<Reservation> GetReservationsForCustomer(Guid customerId, bool trackChanges);
         Reservation GetReservationForCustomer(Guid customerId, Guid reservationId, bool trackChanges);
         void CreateReservation(Reservation reservation);
+        void DeleteReservation(Reservation reservation);
     }
 }
