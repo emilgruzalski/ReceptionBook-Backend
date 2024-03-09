@@ -10,7 +10,11 @@ namespace ReceptionBook
         {
             CreateMap<Room, RoomDto>();
             
+            CreateMap<RoomForCreationDto, Room>();
+            
             CreateMap<Maintenance, MaintenanceDto>();
+            
+            CreateMap<MaintenanceForCreationDto, Maintenance>();
 
             CreateMap<Reservation, ReservationDto>()
                 .ConstructUsing(r => new ReservationDto(
@@ -34,7 +38,11 @@ namespace ReceptionBook
             CreateMap<Reservation, ReservationForCustomerDto>()
                 .ForMember(r => r.RoomNumber, opt => opt.MapFrom(x => x.Room.Number));
             
+            CreateMap<ReservationForCreationDto, Reservation>();
+            
             CreateMap<Customer, CustomerDto>();
+            
+            CreateMap<CustomerForCreationDto, Customer>();
         }
     }
 }

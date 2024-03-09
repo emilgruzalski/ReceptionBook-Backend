@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
+using Shared.DataTransferObjects;
 
 namespace ReceptionBook.Presentation.Controllers;
 
@@ -20,7 +21,7 @@ public class ReservationsController : ControllerBase
         return Ok(reservations);
     }
     
-    [HttpGet("reservations/{id:guid}")]
+    [HttpGet("reservations/{id:guid}", Name = "ReservationById")]
     public IActionResult GetReservation(Guid id)
     {
         var reservation = _service.ReservationService.GetReservation(id, trackChanges: false);
@@ -58,5 +59,16 @@ public class ReservationsController : ControllerBase
         var reservation = _service.ReservationService.GetReservationForCustomer(customerId, id, trackChanges: false);
         
         return Ok(reservation);
+    }
+    
+    [HttpPost("reservations")]
+    public IActionResult CreateReservation([FromBody] ReservationForCreationDto reservation)
+    {
+        if (reservation is null)
+            return BadRequest("ReservationForCreationDto object is null");
+        
+        var createdReservation = _service.ReservationService.CreateReservation(reservation);
+        
+        return CreatedAtRoute("ReservationById", new { id = createdReservation.Id }, createdReservation);
     }
 }

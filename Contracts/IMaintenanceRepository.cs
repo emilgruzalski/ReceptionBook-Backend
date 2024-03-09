@@ -11,5 +11,6 @@ namespace Contracts
     {
         IEnumerable<Maintenance> GetMaintenances(Guid roomId, bool trackChanges);
         Maintenance GetMaintenance(Guid roomId, Guid Id, bool trackChanges);
+        void CreateMaintenanceForRoom(Guid roomId, Maintenance maintenance);
     }
 }
