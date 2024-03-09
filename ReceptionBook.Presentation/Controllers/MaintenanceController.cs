@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
+using Shared.DataTransferObjects;
 
 namespace ReceptionBook.Presentation.Controllers;
 
@@ -19,11 +20,23 @@ public class MaintenanceController : ControllerBase
         return Ok(maintenance);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id:guid}", Name = "GetMaintenanceForRoom")]
     public IActionResult GetMaintenanceForRoom(Guid roomId, Guid id)
     {
         var maintenance = _service.MaintenanceService.GetMaintenance(roomId, id, trackChanges: false);
 
         return Ok(maintenance);
+    }
+    
+    [HttpPost]
+    public IActionResult CreateMaintenanceForRoom(Guid roomId, [FromBody] MaintenanceForCreationDto maintenance)
+    {
+        if (maintenance is null)
+            return BadRequest("MaintenanceForCreationDto object is null");
+        
+        var maintenanceToReturn = _service.MaintenanceService.CreateMaintenanceForRoom(roomId, maintenance, trackChanges: false);
+        
+        return CreatedAtRoute("GetMaintenanceForRoom", new { roomId, id = maintenanceToReturn.Id },
+            maintenanceToReturn);
     }
 }

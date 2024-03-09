@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ReceptionBook.Presentation.ModelBinders;
 using Service.Contracts;
+using Shared.DataTransferObjects;
 
 namespace ReceptionBook.Presentation.Controllers
 {
@@ -19,12 +21,47 @@ namespace ReceptionBook.Presentation.Controllers
             return Ok(rooms);
         }
         
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id:guid}", Name = "RoomById")]
         public IActionResult GetRoom(Guid id)
         {
             var room = _service.RoomService.GetRoom(id, trackChanges: false);
             
             return Ok(room);
+        }
+        
+        [HttpPost]
+        public IActionResult CreateRoom([FromBody] RoomForCreationDto room)
+        {
+            if (room is null)
+                return BadRequest("RoomForCreationDto object is null");
+            
+            var createdRoom = _service.RoomService.CreateRoom(room);
+            
+            return CreatedAtRoute("RoomById", new { id = createdRoom.Id }, createdRoom);
+        }
+        
+        [HttpGet("collection/({ids})", Name = "RoomsCollection")]
+        public IActionResult GetRoomsCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))]IEnumerable<Guid> ids)
+        {
+            var rooms = _service.RoomService.GetByIds(ids, trackChanges: false);
+            
+            return Ok(rooms);
+        }
+        
+        [HttpGet("free")]
+        public IActionResult GetFreeRooms([FromBody] AvailableRoomsDto room)
+        {
+            var freeRooms = _service.RoomService.GetAvailableRooms(room, trackChanges: false);
+            
+            return Ok(freeRooms);
+        }
+        
+        [HttpPost("collection")]
+        public IActionResult CreateRoomCollection([FromBody] IEnumerable<RoomForCreationDto> roomCollection)
+        {
+            var result = _service.RoomService.CreateRoomCollection(roomCollection);
+            
+            return CreatedAtRoute("RoomCollection", new { result.ids }, result.rooms);
         }
     }
 }

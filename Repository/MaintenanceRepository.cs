@@ -23,5 +23,11 @@ namespace Repository
         public Maintenance GetMaintenance(Guid roomId, Guid Id, bool trackChanges) =>
             FindByCondition(m => m.RoomId.Equals(roomId) && m.Id.Equals(Id), trackChanges)
                 .SingleOrDefault();
+
+        public void CreateMaintenanceForRoom(Guid roomId, Maintenance maintenance)
+        {
+            maintenance.RoomId = roomId;
+            Create(maintenance);
+        }
     }
 }

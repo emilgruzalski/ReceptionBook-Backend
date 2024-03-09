@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Contracts;
 using Entities.Exceptions;
+using Entities.Models;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 
@@ -83,6 +84,35 @@ namespace Service
                 throw new ReservationNotFoundException(reservationId);
             
             return _mapper.Map<ReservationForCustomerDto>(reservation);
+        }
+        
+        public ReservationDto CreateReservation(ReservationForCreationDto reservation)
+        {
+            var room = _repository.Room.GetRoomWithDetails(reservation.RoomId, false);
+            if (room is null)
+                throw new RoomNotFoundException(reservation.RoomId);
+            
+            if (room.Reservations.Any(r => r.StartDate <= reservation.EndDate && r.EndDate >= reservation.StartDate))
+                throw new RoomAlreadyReservedException(reservation.RoomId, reservation.StartDate, reservation.EndDate);
+            
+            if (room.Maintenances.Any(m => m.StartDate <= reservation.EndDate && m.EndDate >= reservation.StartDate))
+                throw new RoomUnderMaintenanceException(reservation.RoomId, reservation.StartDate, reservation.EndDate);
+            
+            var customer = _repository.Customer.GetCustomer(reservation.CustomerId, false);
+            if (customer is null)
+                throw new CustomerNotFoundException(reservation.CustomerId);
+            
+            var reservationEntity = _mapper.Map<Reservation>(reservation);
+            
+            _repository.Reservation.CreateReservation(reservationEntity);
+            _repository.Save();
+            
+            reservationEntity.Customer = customer;
+            reservationEntity.Room = room;
+            
+            var reservationToReturn = _mapper.Map<ReservationDto>(reservationEntity);
+            
+            return reservationToReturn;
         }
     }
 }

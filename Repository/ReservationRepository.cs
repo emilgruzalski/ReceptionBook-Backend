@@ -50,5 +50,7 @@ namespace Repository
             FindByCondition(r => r.CustomerId.Equals(customerId) && r.Id.Equals(reservationId), trackChanges)
                 .Include(r => r.Room)
                 .SingleOrDefault();
+        
+        public void CreateReservation(Reservation reservation) => Create(reservation);
     }
 }

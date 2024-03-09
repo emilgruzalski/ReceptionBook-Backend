@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Contracts;
 using Entities.Exceptions;
+using Entities.Models;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 
@@ -49,6 +50,22 @@ namespace Service
             var maintenance = _mapper.Map<MaintenanceDto>(maintenanceDb);
 
             return maintenance;
+        }
+        
+        public MaintenanceDto CreateMaintenanceForRoom(Guid roomId, MaintenanceForCreationDto maintenanceForCreation, bool trackChanges)
+        {
+            var room = _repository.Room.GetRoom(roomId, trackChanges);
+            if (room is null)
+                throw new RoomNotFoundException(roomId);
+
+            var maintenanceEntity = _mapper.Map<Maintenance>(maintenanceForCreation);
+
+            _repository.Maintenance.CreateMaintenanceForRoom(roomId, maintenanceEntity);
+            _repository.Save();
+            
+            var maintenanceToReturn = _mapper.Map<MaintenanceDto>(maintenanceEntity);
+            
+            return maintenanceToReturn;
         }
     }
 }
