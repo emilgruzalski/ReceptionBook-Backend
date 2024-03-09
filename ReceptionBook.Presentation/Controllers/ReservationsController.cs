@@ -71,4 +71,12 @@ public class ReservationsController : ControllerBase
         
         return CreatedAtRoute("ReservationById", new { id = createdReservation.Id }, createdReservation);
     }
+    
+    [HttpDelete("reservations/{id:guid}")]
+    public IActionResult DeleteReservation(Guid id)
+    {
+        _service.ReservationService.DeleteReservation(id, trackChanges: false);
+        
+        return NoContent();
+    }
 }

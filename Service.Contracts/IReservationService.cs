@@ -16,5 +16,6 @@ namespace Service.Contracts
         IEnumerable<ReservationForCustomerDto> GetReservationsForCustomer(Guid customerId, bool trackChanges);
         ReservationForCustomerDto GetReservationForCustomer(Guid customerId, Guid Id, bool trackChanges);
         ReservationDto CreateReservation(ReservationForCreationDto reservation);
+        void DeleteReservation(Guid Id, bool trackChanges);
     }
 }

@@ -67,5 +67,19 @@ namespace Service
             
             return maintenanceToReturn;
         }
+        
+        public void DeleteMaintenanceForRoom(Guid roomId, Guid id, bool trackChanges)
+        {
+            var room = _repository.Room.GetRoom(roomId, trackChanges);
+            if (room is null)
+                throw new RoomNotFoundException(roomId);
+
+            var maintenanceForRoom = _repository.Maintenance.GetMaintenance(roomId, id, trackChanges);
+            if (maintenanceForRoom is null)
+                throw new MaintenanceNotFoundException(id);
+
+            _repository.Maintenance.DeleteMaintenance(maintenanceForRoom);
+            _repository.Save();
+        }
     }
 }

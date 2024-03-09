@@ -12,5 +12,6 @@ namespace Service.Contracts
         IEnumerable<MaintenanceDto> GetMaintenances(Guid roomId, bool trackChanges);
         MaintenanceDto GetMaintenance(Guid roomId, Guid Id, bool trackChanges);
         MaintenanceDto CreateMaintenanceForRoom(Guid roomId, MaintenanceForCreationDto maintenance, bool trackChanges);
+        void DeleteMaintenanceForRoom(Guid roomId, Guid id, bool trackChanges);
     }
 }

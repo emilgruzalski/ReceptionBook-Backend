@@ -39,4 +39,12 @@ public class MaintenanceController : ControllerBase
         return CreatedAtRoute("GetMaintenanceForRoom", new { roomId, id = maintenanceToReturn.Id },
             maintenanceToReturn);
     }
+    
+    [HttpDelete("{id:guid}")]
+    public IActionResult DeleteMaintenanceForRoom(Guid roomId, Guid id)
+    {
+        _service.MaintenanceService.DeleteMaintenanceForRoom(roomId, id, trackChanges: false);
+        
+        return NoContent();
+    }
 }

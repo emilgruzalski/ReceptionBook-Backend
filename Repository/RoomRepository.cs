@@ -44,5 +44,7 @@ namespace Repository
                 .Include(r => r.Reservations)
                 .Include(r => r.Maintenances)
                 .SingleOrDefault();
+        
+        public void DeleteRoom(Room room) => Delete(room);
     }
 }

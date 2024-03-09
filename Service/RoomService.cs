@@ -94,5 +94,15 @@ namespace Service
 
             return (rooms: roomCollectionToReturn, ids: ids);
         }
+        
+        public void DeleteRoom(Guid id, bool trackChanges)
+        {
+            var room = _repository.Room.GetRoom(id, trackChanges);
+            if (room is null)
+                throw new RoomNotFoundException(id);
+            
+            _repository.Room.DeleteRoom(room);
+            _repository.Save();
+        }
     }
 }

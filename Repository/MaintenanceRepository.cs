@@ -29,5 +29,7 @@ namespace Repository
             maintenance.RoomId = roomId;
             Create(maintenance);
         }
+        
+        public void DeleteMaintenance(Maintenance maintenance) => Delete(maintenance);
     }
 }
