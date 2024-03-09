@@ -104,5 +104,15 @@ namespace Service
             _repository.Room.DeleteRoom(room);
             _repository.Save();
         }
+        
+        public void UpdateRoom(Guid id, RoomForUpdateDto room, bool trackChanges)
+        {
+            var roomEntity = _repository.Room.GetRoom(id, trackChanges);
+            if (roomEntity is null)
+                throw new RoomNotFoundException(id);
+            
+            _mapper.Map(room, roomEntity);
+            _repository.Save();
+        }
     }
 }

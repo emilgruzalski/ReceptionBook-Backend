@@ -63,4 +63,15 @@ public class CustomersController : ControllerBase
         
         return NoContent();
     }
+    
+    [HttpPut("{id:guid}")]
+    public IActionResult UpdateCustomer(Guid id, [FromBody] CustomerForUpdateDto customer)
+    {
+        if (customer is null)
+            return BadRequest("CustomerForUpdateDto object is null");
+        
+        _service.CustomerService.UpdateCustomer(id, customer, trackChanges: true);
+        
+        return NoContent();
+    }
 }

@@ -15,5 +15,6 @@ namespace Service.Contracts
         IEnumerable<CustomerDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
         (IEnumerable<CustomerDto> customers, string ids) CreateCustomerCollection(IEnumerable<CustomerForCreationDto> customerCollection);
         void DeleteCustomer(Guid customerId, bool trackChanges);
+        void UpdateCustomer(Guid customerId, CustomerForUpdateDto customer, bool trackChanges);
     }
 }

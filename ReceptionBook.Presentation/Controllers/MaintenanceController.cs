@@ -47,4 +47,15 @@ public class MaintenanceController : ControllerBase
         
         return NoContent();
     }
+    
+    [HttpPut("{id:guid}")]
+    public IActionResult UpdateMaintenanceForRoom(Guid roomId, Guid id, [FromBody] MaintenanceForUpdateDto maintenance)
+    {
+        if (maintenance is null)
+            return BadRequest("MaintenanceForUpdateDto object is null");
+        
+        _service.MaintenanceService.UpdateMaintenanceForRoom(roomId, id, maintenance, roomTrackChanges: false, mainTrackChanges: true);
+        
+        return NoContent();
+    }
 }

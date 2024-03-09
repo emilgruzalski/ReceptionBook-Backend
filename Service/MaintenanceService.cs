@@ -81,5 +81,19 @@ namespace Service
             _repository.Maintenance.DeleteMaintenance(maintenanceForRoom);
             _repository.Save();
         }
+        
+        public void UpdateMaintenanceForRoom(Guid roomId, Guid id, MaintenanceForUpdateDto maintenanceForUpdate, bool roomTrackChanges, bool mainTrackChanges)
+        {
+            var room = _repository.Room.GetRoom(roomId, roomTrackChanges);
+            if (room is null)
+                throw new RoomNotFoundException(roomId);
+
+            var maintenanceEntity = _repository.Maintenance.GetMaintenance(roomId, id, mainTrackChanges);
+            if (maintenanceEntity is null)
+                throw new MaintenanceNotFoundException(id);
+
+            _mapper.Map(maintenanceForUpdate, maintenanceEntity);
+            _repository.Save();
+        }
     }
 }
