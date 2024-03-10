@@ -29,6 +29,6 @@ namespace Repository
         public IReservationRepository Reservation => _reservationRepository.Value;
         public IMaintenanceRepository Maintenance => _maintenanceRepository.Value;
         
-        public void Save() => _repositoryContext.SaveChanges();
+        public Task SaveAsync() => _repositoryContext.SaveChangesAsync();
     }
 }

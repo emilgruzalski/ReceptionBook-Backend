@@ -9,8 +9,8 @@ namespace Contracts
 {
     public interface IMaintenanceRepository
     {
-        IEnumerable<Maintenance> GetMaintenances(Guid roomId, bool trackChanges);
-        Maintenance GetMaintenance(Guid roomId, Guid Id, bool trackChanges);
+        Task<IEnumerable<Maintenance>> GetMaintenancesAsync(Guid roomId, bool trackChanges);
+        Task<Maintenance> GetMaintenanceAsync(Guid roomId, Guid Id, bool trackChanges);
         void CreateMaintenanceForRoom(Guid roomId, Maintenance maintenance);
         void DeleteMaintenance(Maintenance maintenance);
     }

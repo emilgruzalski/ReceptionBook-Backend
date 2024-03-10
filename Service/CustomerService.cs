@@ -20,39 +20,39 @@ namespace Service
             _mapper = mapper;
         }
         
-        public IEnumerable<CustomerDto> GetAllCustomers(bool trackChanges)
+        public async Task<IEnumerable<CustomerDto>> GetAllCustomersAsync(bool trackChanges)
         {
-            var customers = _repository.Customer.GetAllCustomers(trackChanges);
+            var customers = await _repository.Customer.GetAllCustomersAsync(trackChanges);
             return _mapper.Map<IEnumerable<CustomerDto>>(customers);
         }
         
-        public CustomerDto GetCustomer(Guid customerId, bool trackChanges)
+        public async Task<CustomerDto> GetCustomerAsync(Guid customerId, bool trackChanges)
         {
-            var customer = _repository.Customer.GetCustomer(customerId, trackChanges);
+            var customer = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);
             if (customer is null)
                 throw new CustomerNotFoundException(customerId);
             
             return _mapper.Map<CustomerDto>(customer);
         }
         
-        public CustomerDto CreateCustomer(CustomerForCreationDto customer)
+        public async Task<CustomerDto> CreateCustomerAsync(CustomerForCreationDto customer)
         {
             var customerEntity = _mapper.Map<Customer>(customer);
             
             _repository.Customer.CreateCustomer(customerEntity);
-            _repository.Save();
+            await _repository.SaveAsync();
             
             var customerToReturn = _mapper.Map<CustomerDto>(customerEntity);
             
             return customerToReturn;
         }
 
-        public IEnumerable<CustomerDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges)
+        public async Task<IEnumerable<CustomerDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges)
         {
             if (ids is null)
                 throw new IdParametersBadRequestException();
             
-            var customersEntities = _repository.Customer.GetByIds(ids, trackChanges);
+            var customersEntities = await _repository.Customer.GetByIdsAsync(ids, trackChanges);
             if (ids.Count() != customersEntities.Count())
                 throw new CollectionByIdsBadRequestException();
             
@@ -61,7 +61,7 @@ namespace Service
             return customersToReturn;
         }
         
-        public (IEnumerable<CustomerDto> customers, string ids) CreateCustomerCollection(IEnumerable<CustomerForCreationDto> customerCollection)
+        public async Task<(IEnumerable<CustomerDto> customers, string ids)> CreateCustomerCollectionAsync(IEnumerable<CustomerForCreationDto> customerCollection)
         {
             if (customerCollection is null)
                 throw new CustomerCollectionBadRequest();
@@ -72,7 +72,7 @@ namespace Service
                 _repository.Customer.CreateCustomer(customer);
             }
 
-            _repository.Save();
+            await _repository.SaveAsync();
             
             var customerCollectionToReturn = _mapper.Map<IEnumerable<CustomerDto>>(customersEntities);
             var ids = string.Join(",", customerCollectionToReturn.Select(c => c.Id));
@@ -80,24 +80,24 @@ namespace Service
             return (customers: customerCollectionToReturn, ids: ids);
         }
         
-        public void DeleteCustomer(Guid customerId, bool trackChanges)
+        public async Task DeleteCustomerAsync(Guid customerId, bool trackChanges)
         {
-            var customer = _repository.Customer.GetCustomer(customerId, trackChanges);
+            var customer = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);
             if (customer is null)
                 throw new CustomerNotFoundException(customerId);
             
             _repository.Customer.DeleteCustomer(customer);
-            _repository.Save();
+            await _repository.SaveAsync();
         }
 
-        public void UpdateCustomer(Guid customerId, CustomerForUpdateDto customer, bool trackChanges)
+        public async Task UpdateCustomerAsync(Guid customerId, CustomerForUpdateDto customer, bool trackChanges)
         {
-            var customerEntity = _repository.Customer.GetCustomer(customerId, trackChanges);
+            var customerEntity = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);
             if (customerEntity is null)
                 throw new CustomerNotFoundException(customerId);
 
             _mapper.Map(customer, customerEntity);
-            _repository.Save();
+            await _repository.SaveAsync();
         }
     }
 }

@@ -13,23 +13,23 @@ public class ReservationsController : ControllerBase
     public ReservationsController(IServiceManager service) => _service = service;
     
     [HttpGet]
-    public IActionResult GetReservations()
+    public async Task<IActionResult> GetReservations()
     {
-        var reservations = _service.ReservationService.GetAllReservations(trackChanges: false);
+        var reservations = await _service.ReservationService.GetAllReservationsAsync(trackChanges: false);
         
         return Ok(reservations);
     }
     
     [HttpGet("{id:guid}", Name = "ReservationById")]
-    public IActionResult GetReservation(Guid id)
+    public async Task<IActionResult> GetReservation(Guid id)
     {
-        var reservation = _service.ReservationService.GetReservation(id, trackChanges: false);
+        var reservation = await _service.ReservationService.GetReservationAsync(id, trackChanges: false);
         
         return Ok(reservation);
     }
     
     [HttpPost]
-    public IActionResult CreateReservation([FromBody] ReservationForCreationDto reservation)
+    public async Task<IActionResult> CreateReservation([FromBody] ReservationForCreationDto reservation)
     {
         if (reservation is null)
             return BadRequest("ReservationForCreationDto object is null");
@@ -37,21 +37,21 @@ public class ReservationsController : ControllerBase
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
         
-        var createdReservation = _service.ReservationService.CreateReservation(reservation);
+        var createdReservation = await _service.ReservationService.CreateReservationAsync(reservation);
         
         return CreatedAtRoute("ReservationById", new { id = createdReservation.Id }, createdReservation);
     }
     
     [HttpDelete("{id:guid}")]
-    public IActionResult DeleteReservation(Guid id)
+    public async Task<IActionResult> DeleteReservation(Guid id)
     {
-        _service.ReservationService.DeleteReservation(id, trackChanges: false);
+        await _service.ReservationService.DeleteReservationAsync(id, trackChanges: false);
         
         return NoContent();
     }
     
     [HttpPut("{id:guid}")]
-    public IActionResult UpdateReservation(Guid id, [FromBody] ReservationForUpdateDto reservation)
+    public async Task<IActionResult> UpdateReservation(Guid id, [FromBody] ReservationForUpdateDto reservation)
     {
         if (reservation is null)
             return BadRequest("ReservationForUpdateDto object is null");
@@ -59,7 +59,7 @@ public class ReservationsController : ControllerBase
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
         
-        _service.ReservationService.UpdateReservation(id, reservation, trackChanges: true);
+        await _service.ReservationService.UpdateReservationAsync(id, reservation, trackChanges: true);
         
         return NoContent();
     }

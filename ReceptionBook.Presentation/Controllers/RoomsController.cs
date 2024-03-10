@@ -14,79 +14,81 @@ namespace ReceptionBook.Presentation.Controllers
         public RoomsController(IServiceManager service) => _service = service;
 
         [HttpGet]
-        public IActionResult GetRooms()
+        public async Task<IActionResult> GetRooms()
         {
-            var rooms = _service.RoomService.GetAllRooms(trackChanges: false);
+            var rooms = await _service.RoomService.GetAllRoomsAsync(trackChanges: false);
 
             return Ok(rooms);
         }
         
         [HttpGet("{id:guid}", Name = "RoomById")]
-        public IActionResult GetRoom(Guid id)
+        public async Task<IActionResult> GetRoom(Guid id)
         {
-            var room = _service.RoomService.GetRoom(id, trackChanges: false);
+            var room = await _service.RoomService.GetRoomAsync(id, trackChanges: false);
             
             return Ok(room);
         }
         
         [HttpPost]
-        public IActionResult CreateRoom([FromBody] RoomForCreationDto room)
+        public async Task<IActionResult> CreateRoom([FromBody] RoomForCreationDto room)
         {
             if (room is null)
                 return BadRequest("RoomForCreationDto object is null");
             
-            var createdRoom = _service.RoomService.CreateRoom(room);
+            var createdRoom = await _service.RoomService.CreateRoomAsync(room);
             
             return CreatedAtRoute("RoomById", new { id = createdRoom.Id }, createdRoom);
         }
         
         [HttpGet("collection/({ids})", Name = "RoomsCollection")]
-        public IActionResult GetRoomsCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))]IEnumerable<Guid> ids)
+        public async Task<IActionResult> GetRoomsCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))]IEnumerable<Guid> ids)
         {
-            var rooms = _service.RoomService.GetByIds(ids, trackChanges: false);
+            var rooms = await _service.RoomService.GetByIdsAsync(ids, trackChanges: false);
             
             return Ok(rooms);
         }
         
         [HttpGet("free")]
-        public IActionResult GetFreeRooms([FromBody] AvailableRoomsDto room)
+        public async Task<IActionResult> GetFreeRooms(DateTime start, DateTime end, string type)
         {
-            var freeRooms = _service.RoomService.GetAvailableRooms(room, trackChanges: false);
+            var room = new AvailableRoomsDto(type, start, end);
+            
+            var freeRooms = await _service.RoomService.GetAvailableRoomsAsync(room, trackChanges: false);
             
             return Ok(freeRooms);
         }
         
         [HttpPost("collection")]
-        public IActionResult CreateRoomCollection([FromBody] IEnumerable<RoomForCreationDto> roomCollection)
+        public async Task<IActionResult> CreateRoomCollection([FromBody] IEnumerable<RoomForCreationDto> roomCollection)
         {
-            var result = _service.RoomService.CreateRoomCollection(roomCollection);
+            var result = await _service.RoomService.CreateRoomCollectionAsync(roomCollection);
             
             return CreatedAtRoute("RoomCollection", new { result.ids }, result.rooms);
         }
         
         [HttpDelete("{id:guid}")]
-        public IActionResult DeleteRoom(Guid id)
+        public async Task<IActionResult> DeleteRoom(Guid id)
         {
-            _service.RoomService.DeleteRoom(id, trackChanges: false);
+            await _service.RoomService.DeleteRoomAsync(id, trackChanges: false);
             
             return NoContent();
         }
         
         [HttpPut("{id:guid}")]
-        public IActionResult UpdateRoom(Guid id, [FromBody] RoomForUpdateDto room)
+        public async Task<IActionResult> UpdateRoom(Guid id, [FromBody] RoomForUpdateDto room)
         {
             if (room is null)
                 return BadRequest("RoomForUpdateDto object is null");
             
-            _service.RoomService.UpdateRoom(id, room, trackChanges: true);
+            await _service.RoomService.UpdateRoomAsync(id, room, trackChanges: true);
             
             return NoContent();
         }
         
         [HttpGet("{roomId}/reservations")]
-        public IActionResult GetReservationsForRoom(Guid roomId)
+        public async Task<IActionResult> GetReservationsForRoom(Guid roomId)
         {
-            var reservations = _service.ReservationService.GetReservationsForRoom(roomId, trackChanges: false);
+            var reservations = await _service.ReservationService.GetReservationsForRoomAsync(roomId, trackChanges: false);
         
             return Ok(reservations);
         }

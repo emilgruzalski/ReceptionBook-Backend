@@ -9,12 +9,10 @@ namespace Contracts
 {
     public interface IReservationRepository
     {
-        IEnumerable<Reservation> GetAllReservations(bool trackChanges);
-        Reservation GetReservation(Guid reservationId, bool trackChanges);
-        IEnumerable<Reservation> GetReservationsForRoom(Guid roomId, bool trackChanges);
-        Reservation GetReservationForRoom(Guid roomId, Guid reservationId, bool trackChanges);
-        IEnumerable<Reservation> GetReservationsForCustomer(Guid customerId, bool trackChanges);
-        Reservation GetReservationForCustomer(Guid customerId, Guid reservationId, bool trackChanges);
+        Task<IEnumerable<Reservation>> GetAllReservationsAsync(bool trackChanges);
+        Task<Reservation> GetReservationAsync(Guid reservationId, bool trackChanges);
+        Task<IEnumerable<Reservation>> GetReservationsForRoomAsync(Guid roomId, bool trackChanges);
+        Task<IEnumerable<Reservation>> GetReservationsForCustomerAsync(Guid customerId, bool trackChanges);
         void CreateReservation(Reservation reservation);
         void DeleteReservation(Reservation reservation);
     }
