@@ -9,10 +9,10 @@ namespace Contracts
 {
     public interface ICustomerRepository
     {
-        IEnumerable<Customer> GetAllCustomers(bool trackChanges);
-        Customer GetCustomer(Guid customerId, bool trackChanges);
+        Task<IEnumerable<Customer>> GetAllCustomersAsync(bool trackChanges);
+        Task<Customer> GetCustomerAsync(Guid customerId, bool trackChanges);
         void CreateCustomer(Customer customer);
-        IEnumerable<Customer> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
+        Task<IEnumerable<Customer>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
         void DeleteCustomer(Customer customer);
     }
 }

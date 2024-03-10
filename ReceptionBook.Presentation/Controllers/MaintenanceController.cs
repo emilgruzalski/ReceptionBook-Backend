@@ -13,23 +13,23 @@ public class MaintenanceController : ControllerBase
     public MaintenanceController(IServiceManager service) => _service = service;
 
     [HttpGet]
-    public IActionResult GetMaintenancesForRoom(Guid roomId)
+    public async Task<IActionResult> GetMaintenancesForRoom(Guid roomId)
     {
-        var maintenance = _service.MaintenanceService.GetMaintenances(roomId, trackChanges: false);
+        var maintenance = await _service.MaintenanceService.GetMaintenancesAsync(roomId, trackChanges: false);
 
         return Ok(maintenance);
     }
 
     [HttpGet("{id:guid}", Name = "GetMaintenanceForRoom")]
-    public IActionResult GetMaintenanceForRoom(Guid roomId, Guid id)
+    public async Task<IActionResult> GetMaintenanceForRoom(Guid roomId, Guid id)
     {
-        var maintenance = _service.MaintenanceService.GetMaintenance(roomId, id, trackChanges: false);
+        var maintenance = await _service.MaintenanceService.GetMaintenanceAsync(roomId, id, trackChanges: false);
 
         return Ok(maintenance);
     }
     
     [HttpPost]
-    public IActionResult CreateMaintenanceForRoom(Guid roomId, [FromBody] MaintenanceForCreationDto maintenance)
+    public async Task<IActionResult> CreateMaintenanceForRoom(Guid roomId, [FromBody] MaintenanceForCreationDto maintenance)
     {
         if (maintenance is null)
             return BadRequest("MaintenanceForCreationDto object is null");
@@ -37,22 +37,22 @@ public class MaintenanceController : ControllerBase
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
         
-        var maintenanceToReturn = _service.MaintenanceService.CreateMaintenanceForRoom(roomId, maintenance, trackChanges: false);
+        var maintenanceToReturn = await _service.MaintenanceService.CreateMaintenanceForRoomAsync(roomId, maintenance, trackChanges: false);
         
         return CreatedAtRoute("GetMaintenanceForRoom", new { roomId, id = maintenanceToReturn.Id },
             maintenanceToReturn);
     }
     
     [HttpDelete("{id:guid}")]
-    public IActionResult DeleteMaintenanceForRoom(Guid roomId, Guid id)
+    public async Task<IActionResult> DeleteMaintenanceForRoom(Guid roomId, Guid id)
     {
-        _service.MaintenanceService.DeleteMaintenanceForRoom(roomId, id, trackChanges: false);
+        await _service.MaintenanceService.DeleteMaintenanceForRoomAsync(roomId, id, trackChanges: false);
         
         return NoContent();
     }
     
     [HttpPut("{id:guid}")]
-    public IActionResult UpdateMaintenanceForRoom(Guid roomId, Guid id, [FromBody] MaintenanceForUpdateDto maintenance)
+    public async Task<IActionResult> UpdateMaintenanceForRoom(Guid roomId, Guid id, [FromBody] MaintenanceForUpdateDto maintenance)
     {
         if (maintenance is null)
             return BadRequest("MaintenanceForUpdateDto object is null");
@@ -60,7 +60,7 @@ public class MaintenanceController : ControllerBase
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
         
-        _service.MaintenanceService.UpdateMaintenanceForRoom(roomId, id, maintenance, roomTrackChanges: false, mainTrackChanges: true);
+        await _service.MaintenanceService.UpdateMaintenanceForRoomAsync(roomId, id, maintenance, roomTrackChanges: false, mainTrackChanges: true);
         
         return NoContent();
     }

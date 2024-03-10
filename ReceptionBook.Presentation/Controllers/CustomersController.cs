@@ -14,23 +14,23 @@ public class CustomersController : ControllerBase
     public CustomersController(IServiceManager service) => _service = service;
     
     [HttpGet]
-    public IActionResult GetCustomers()
+    public async Task<IActionResult> GetCustomers()
     {
-        var customers = _service.CustomerService.GetAllCustomers(trackChanges: false);
+        var customers = await _service.CustomerService.GetAllCustomersAsync(trackChanges: false);
         
         return Ok(customers);
     }
     
     [HttpGet("{id:guid}", Name = "CustomerById")]
-    public IActionResult GetCustomer(Guid id)
+    public async Task<IActionResult> GetCustomer(Guid id)
     {
-        var customer = _service.CustomerService.GetCustomer(id, trackChanges: false);
+        var customer = await _service.CustomerService.GetCustomerAsync(id, trackChanges: false);
         
         return Ok(customer);
     }
     
     [HttpPost]
-    public IActionResult CreateCustomer([FromBody] CustomerForCreationDto customer)
+    public async Task<IActionResult> CreateCustomer([FromBody] CustomerForCreationDto customer)
     {
         if (customer is null)
             return BadRequest("CustomerForCreationDto object is null");
@@ -38,23 +38,23 @@ public class CustomersController : ControllerBase
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
         
-        var createdCustomer = _service.CustomerService.CreateCustomer(customer);
+        var createdCustomer = await _service.CustomerService.CreateCustomerAsync(customer);
         
         return CreatedAtRoute("CustomerById", new { id = createdCustomer.Id }, createdCustomer);
     }
     
     [HttpGet("collection/({ids})", Name = "CustomersCollection")]
-    public IActionResult GetCustomersCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))]IEnumerable<Guid> ids)
+    public async Task<IActionResult> GetCustomersCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))]IEnumerable<Guid> ids)
     {
-        var customers = _service.CustomerService.GetByIds(ids, trackChanges: false);
+        var customers = await _service.CustomerService.GetByIdsAsync(ids, trackChanges: false);
         
         return Ok(customers);
     }
     
     [HttpPost("collection")]
-    public IActionResult CreateCustomerCollection([FromBody] IEnumerable<CustomerForCreationDto> customerCollection)
+    public async Task<IActionResult> CreateCustomerCollection([FromBody] IEnumerable<CustomerForCreationDto> customerCollection)
     {
-        var result = _service.CustomerService.CreateCustomerCollection(customerCollection);
+        var result = await _service.CustomerService.CreateCustomerCollectionAsync(customerCollection);
         
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
@@ -63,15 +63,15 @@ public class CustomersController : ControllerBase
     }
     
     [HttpDelete("{id:guid}")]
-    public IActionResult DeleteCustomer(Guid id)
+    public async Task<IActionResult> DeleteCustomer(Guid id)
     {
-        _service.CustomerService.DeleteCustomer(id, trackChanges: false);
+        await _service.CustomerService.DeleteCustomerAsync(id, trackChanges: false);
         
         return NoContent();
     }
     
     [HttpPut("{id:guid}")]
-    public IActionResult UpdateCustomer(Guid id, [FromBody] CustomerForUpdateDto customer)
+    public async Task<IActionResult> UpdateCustomer(Guid id, [FromBody] CustomerForUpdateDto customer)
     {
         if (customer is null)
             return BadRequest("CustomerForUpdateDto object is null");
@@ -79,15 +79,15 @@ public class CustomersController : ControllerBase
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
         
-        _service.CustomerService.UpdateCustomer(id, customer, trackChanges: true);
+        await _service.CustomerService.UpdateCustomerAsync(id, customer, trackChanges: true);
         
         return NoContent();
     }
     
     [HttpGet("{customerId}/reservations")]
-    public IActionResult GetReservationsForCustomer(Guid customerId)
+    public async Task<IActionResult> GetReservationsForCustomer(Guid customerId)
     {
-        var reservations = _service.ReservationService.GetReservationsForCustomer(customerId, trackChanges: false);
+        var reservations = await _service.ReservationService.GetReservationsForCustomerAsync(customerId, trackChanges: false);
         
         return Ok(reservations);
     }

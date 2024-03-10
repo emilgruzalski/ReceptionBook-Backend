@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Contracts;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
@@ -15,20 +16,20 @@ namespace Repository
         {
         }
         
-        public IEnumerable<Customer> GetAllCustomers(bool trackChanges) =>
-            FindAll(trackChanges)
+        public async Task<IEnumerable<Customer>> GetAllCustomersAsync(bool trackChanges) =>
+            await FindAll(trackChanges)
                 .OrderBy(c => c.FirstName)
-                .ToList();
+                .ToListAsync();
         
-        public Customer GetCustomer(Guid customerId, bool trackChanges) =>
-            FindByCondition(c => c.Id.Equals(customerId), trackChanges)
-                .SingleOrDefault();
+        public async Task<Customer> GetCustomerAsync(Guid customerId, bool trackChanges) =>
+            await FindByCondition(c => c.Id.Equals(customerId), trackChanges)
+                .SingleOrDefaultAsync();
         
         public void CreateCustomer(Customer customer) => Create(customer);
         
-        public IEnumerable<Customer> GetByIds(IEnumerable<Guid> ids, bool trackChanges) =>
-            FindByCondition(x => ids.Contains(x.Id), trackChanges)
-                .ToList();
+        public async Task<IEnumerable<Customer>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges) =>
+            await FindByCondition(x => ids.Contains(x.Id), trackChanges)
+                .ToListAsync();
         
         public void DeleteCustomer(Customer customer) => Delete(customer);
     }

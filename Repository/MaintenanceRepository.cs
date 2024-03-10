@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Contracts;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
@@ -15,14 +16,14 @@ namespace Repository
         {
         }
         
-        public IEnumerable<Maintenance> GetMaintenances(Guid roomId, bool trackChanges) =>
-            FindByCondition(m => m.RoomId.Equals(roomId), trackChanges)
+        public async Task<IEnumerable<Maintenance>> GetMaintenancesAsync(Guid roomId, bool trackChanges) =>
+            await FindByCondition(m => m.RoomId.Equals(roomId), trackChanges)
                 .OrderBy(m => m.StartDate)
-                .ToList();
+                .ToListAsync();
         
-        public Maintenance GetMaintenance(Guid roomId, Guid Id, bool trackChanges) =>
-            FindByCondition(m => m.RoomId.Equals(roomId) && m.Id.Equals(Id), trackChanges)
-                .SingleOrDefault();
+        public async Task<Maintenance> GetMaintenanceAsync(Guid roomId, Guid Id, bool trackChanges) =>
+            await FindByCondition(m => m.RoomId.Equals(roomId) && m.Id.Equals(Id), trackChanges)
+                .SingleOrDefaultAsync();
 
         public void CreateMaintenanceForRoom(Guid roomId, Maintenance maintenance)
         {

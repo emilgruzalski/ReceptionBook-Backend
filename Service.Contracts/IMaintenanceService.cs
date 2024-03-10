@@ -9,10 +9,10 @@ namespace Service.Contracts
 {
     public interface IMaintenanceService
     {
-        IEnumerable<MaintenanceDto> GetMaintenances(Guid roomId, bool trackChanges);
-        MaintenanceDto GetMaintenance(Guid roomId, Guid Id, bool trackChanges);
-        MaintenanceDto CreateMaintenanceForRoom(Guid roomId, MaintenanceForCreationDto maintenance, bool trackChanges);
-        void DeleteMaintenanceForRoom(Guid roomId, Guid id, bool trackChanges);
-        void UpdateMaintenanceForRoom(Guid roomId, Guid id, MaintenanceForUpdateDto maintenance, bool roomTrackChanges, bool mainTrackChanges);
+        Task<IEnumerable<MaintenanceDto>> GetMaintenancesAsync(Guid roomId, bool trackChanges);
+        Task<MaintenanceDto> GetMaintenanceAsync(Guid roomId, Guid Id, bool trackChanges);
+        Task<MaintenanceDto> CreateMaintenanceForRoomAsync(Guid roomId, MaintenanceForCreationDto maintenance, bool trackChanges);
+        Task DeleteMaintenanceForRoomAsync(Guid roomId, Guid id, bool trackChanges);
+        Task UpdateMaintenanceForRoomAsync(Guid roomId, Guid id, MaintenanceForUpdateDto maintenance, bool roomTrackChanges, bool mainTrackChanges);
     }
 }

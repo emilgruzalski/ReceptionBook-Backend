@@ -16,34 +16,34 @@ namespace Repository
         {
         }
 
-        public IEnumerable<Room> GetAllRooms(bool trackChanges) =>
-            FindAll(trackChanges)
+        public async Task<IEnumerable<Room>> GetAllRoomsAsync(bool trackChanges) =>
+            await FindAll(trackChanges)
                 .OrderBy(r => r.Number)
-                .ToList();
+                .ToListAsync();
         
-        public Room GetRoom(Guid roomId, bool trackChanges) =>
-            FindByCondition(r => r.Id.Equals(roomId), trackChanges)
-            .SingleOrDefault();
+        public async Task<Room> GetRoomAsync(Guid roomId, bool trackChanges) =>
+            await FindByCondition(r => r.Id.Equals(roomId), trackChanges)
+            .SingleOrDefaultAsync();
         
         public void CreateRoom(Room room) => Create(room);
         
-        public IEnumerable<Room> GetByIds(IEnumerable<Guid> ids, bool trackChanges) =>
-            FindByCondition(x => ids.Contains(x.Id), trackChanges)
-                .ToList();
+        public async Task<IEnumerable<Room>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges) =>
+            await FindByCondition(x => ids.Contains(x.Id), trackChanges)
+                .ToListAsync();
         
-        public IEnumerable<Room> GetAvailableRooms(DateTime startDate, DateTime endDate, bool trackChanges) =>
-            FindByCondition(r => !r.Reservations.Any(res => res.StartDate < endDate && 
+        public async Task<IEnumerable<Room>> GetAvailableRoomsAsync(DateTime startDate, DateTime endDate, bool trackChanges) =>
+            await FindByCondition(r => !r.Reservations.Any(res => res.StartDate < endDate && 
                                                             res.EndDate > startDate && 
                                                             res.Status != "Cancelled") &&
                                  !r.Maintenances.Any(m => m.StartDate < endDate && 
                                                           m.EndDate > startDate), trackChanges)
-                .ToList();
+                .ToListAsync();
         
-        public Room GetRoomWithDetails(Guid roomId, bool trackChanges) =>
-            FindByCondition(r => r.Id.Equals(roomId), trackChanges)
+        public async Task<Room> GetRoomWithDetailsAsync(Guid roomId, bool trackChanges) =>
+            await FindByCondition(r => r.Id.Equals(roomId), trackChanges)
                 .Include(r => r.Reservations)
                 .Include(r => r.Maintenances)
-                .SingleOrDefault();
+                .SingleOrDefaultAsync();
         
         public void DeleteRoom(Room room) => Delete(room);
     }

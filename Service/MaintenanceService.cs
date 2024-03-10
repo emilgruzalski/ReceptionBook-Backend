@@ -25,25 +25,25 @@ namespace Service
             _mapper = mapper;
         }
         
-        public IEnumerable<MaintenanceDto> GetMaintenances(Guid roomId, bool trackChanges)
+        public async Task<IEnumerable<MaintenanceDto>> GetMaintenancesAsync(Guid roomId, bool trackChanges)
         {
-            var room = _repository.Room.GetRoom(roomId, trackChanges);
+            var room = await _repository.Room.GetRoomAsync(roomId, trackChanges);
             if (room is null)
                 throw new RoomNotFoundException(roomId);
             
-            var maintenanceFromDb = _repository.Maintenance.GetMaintenances(roomId, trackChanges);
+            var maintenanceFromDb = await _repository.Maintenance.GetMaintenancesAsync(roomId, trackChanges);
             var maintenanceDto = _mapper.Map<IEnumerable<MaintenanceDto>>(maintenanceFromDb);
             
             return maintenanceDto;
         }
 
-        public MaintenanceDto GetMaintenance(Guid roomId, Guid id, bool trackChanges)
+        public async Task<MaintenanceDto> GetMaintenanceAsync(Guid roomId, Guid id, bool trackChanges)
         {
-            var room = _repository.Room.GetRoom(roomId, trackChanges);
+            var room = await _repository.Room.GetRoomAsync(roomId, trackChanges);
             if (room is null)
                 throw new RoomNotFoundException(roomId);
 
-            var maintenanceDb = _repository.Maintenance.GetMaintenance(roomId, id, trackChanges);
+            var maintenanceDb = await _repository.Maintenance.GetMaintenanceAsync(roomId, id, trackChanges);
             if (maintenanceDb is null)
                 throw new MaintenanceNotFoundException(id);
 
@@ -52,9 +52,9 @@ namespace Service
             return maintenance;
         }
         
-        public MaintenanceDto CreateMaintenanceForRoom(Guid roomId, MaintenanceForCreationDto maintenanceForCreation, bool trackChanges)
+        public async Task<MaintenanceDto> CreateMaintenanceForRoomAsync(Guid roomId, MaintenanceForCreationDto maintenanceForCreation, bool trackChanges)
         {
-            var room = _repository.Room.GetRoomWithDetails(roomId, trackChanges);
+            var room = await _repository.Room.GetRoomWithDetailsAsync(roomId, trackChanges);
             if (room is null)
                 throw new RoomNotFoundException(roomId);
             
@@ -64,42 +64,42 @@ namespace Service
             var maintenanceEntity = _mapper.Map<Maintenance>(maintenanceForCreation);
 
             _repository.Maintenance.CreateMaintenanceForRoom(roomId, maintenanceEntity);
-            _repository.Save();
+            await _repository.SaveAsync();
             
             var maintenanceToReturn = _mapper.Map<MaintenanceDto>(maintenanceEntity);
             
             return maintenanceToReturn;
         }
         
-        public void DeleteMaintenanceForRoom(Guid roomId, Guid id, bool trackChanges)
+        public async Task DeleteMaintenanceForRoomAsync(Guid roomId, Guid id, bool trackChanges)
         {
-            var room = _repository.Room.GetRoom(roomId, trackChanges);
+            var room = await _repository.Room.GetRoomAsync(roomId, trackChanges);
             if (room is null)
                 throw new RoomNotFoundException(roomId);
 
-            var maintenanceForRoom = _repository.Maintenance.GetMaintenance(roomId, id, trackChanges);
+            var maintenanceForRoom = await _repository.Maintenance.GetMaintenanceAsync(roomId, id, trackChanges);
             if (maintenanceForRoom is null)
                 throw new MaintenanceNotFoundException(id);
 
             _repository.Maintenance.DeleteMaintenance(maintenanceForRoom);
-            _repository.Save();
+            await _repository.SaveAsync();
         }
         
-        public void UpdateMaintenanceForRoom(Guid roomId, Guid id, MaintenanceForUpdateDto maintenanceForUpdate, bool roomTrackChanges, bool mainTrackChanges)
+        public async Task UpdateMaintenanceForRoomAsync(Guid roomId, Guid id, MaintenanceForUpdateDto maintenanceForUpdate, bool roomTrackChanges, bool mainTrackChanges)
         {
-            var room = _repository.Room.GetRoomWithDetails(roomId, roomTrackChanges);
+            var room = await _repository.Room.GetRoomWithDetailsAsync(roomId, roomTrackChanges);
             if (room is null)
                 throw new RoomNotFoundException(roomId);
 
             if (room.Reservations.Any(r => r.StartDate <= maintenanceForUpdate.EndDate && r.EndDate >= maintenanceForUpdate.StartDate && r.Status != "Canceled"))
                 throw new RoomIsReservedException(roomId);
             
-            var maintenanceEntity = _repository.Maintenance.GetMaintenance(roomId, id, mainTrackChanges);
+            var maintenanceEntity = await _repository.Maintenance.GetMaintenanceAsync(roomId, id, mainTrackChanges);
             if (maintenanceEntity is null)
                 throw new MaintenanceNotFoundException(id);
 
             _mapper.Map(maintenanceForUpdate, maintenanceEntity);
-            _repository.Save();
+            await _repository.SaveAsync();
         }
     }
 }

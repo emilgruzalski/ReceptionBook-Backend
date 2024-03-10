@@ -12,6 +12,6 @@ namespace Contracts
         IReservationRepository Reservation { get; }
         ICustomerRepository Customer { get; }
         IRoomRepository Room { get; }
-        void Save();
+        Task SaveAsync();
     }
 }

@@ -9,14 +9,12 @@ namespace Service.Contracts
 {
     public interface IReservationService
     {
-        IEnumerable<ReservationDto> GetAllReservations(bool trackChanges);
-        ReservationDto GetReservation(Guid Id, bool trackChanges);
-        IEnumerable<ReservationDto> GetReservationsForRoom(Guid roomId, bool trackChanges);
-        ReservationDto GetReservationForRoom(Guid roomId, Guid Id, bool trackChanges);
-        IEnumerable<ReservationDto> GetReservationsForCustomer(Guid customerId, bool trackChanges);
-        ReservationDto GetReservationForCustomer(Guid customerId, Guid Id, bool trackChanges);
-        ReservationDto CreateReservation(ReservationForCreationDto reservation);
-        void DeleteReservation(Guid Id, bool trackChanges);
-        void UpdateReservation(Guid Id, ReservationForUpdateDto reservation, bool trackChanges);
+        Task<IEnumerable<ReservationDto>> GetAllReservationsAsync(bool trackChanges);
+        Task<ReservationDto> GetReservationAsync(Guid Id, bool trackChanges);
+        Task<IEnumerable<ReservationDto>> GetReservationsForRoomAsync(Guid roomId, bool trackChanges);
+        Task<IEnumerable<ReservationDto>> GetReservationsForCustomerAsync(Guid customerId, bool trackChanges);
+        Task<ReservationDto> CreateReservationAsync(ReservationForCreationDto reservation);
+        Task DeleteReservationAsync(Guid Id, bool trackChanges);
+        Task UpdateReservationAsync(Guid Id, ReservationForUpdateDto reservation, bool trackChanges);
     }
 }

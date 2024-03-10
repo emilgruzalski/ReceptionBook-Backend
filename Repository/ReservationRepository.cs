@@ -16,40 +16,30 @@ namespace Repository
         {
         }
         
-        public IEnumerable<Reservation> GetAllReservations(bool trackChanges) =>
-            FindAll(trackChanges)
+        public async Task<IEnumerable<Reservation>> GetAllReservationsAsync(bool trackChanges) =>
+            await FindAll(trackChanges)
                 .Include(r => r.Customer)
                 .Include(r => r.Room)
                 .OrderBy(r => r.StartDate)
-                .ToList();
+                .ToListAsync();
         
-        public Reservation GetReservation(Guid reservationId, bool trackChanges) =>
-            FindByCondition(r => r.Id.Equals(reservationId), trackChanges)
+        public async Task<Reservation> GetReservationAsync(Guid reservationId, bool trackChanges) =>
+            await FindByCondition(r => r.Id.Equals(reservationId), trackChanges)
                 .Include(r => r.Customer)
                 .Include(r => r.Room)
-                .SingleOrDefault();
+                .SingleOrDefaultAsync();
         
-        public IEnumerable<Reservation> GetReservationsForRoom(Guid roomId, bool trackChanges) =>
-            FindByCondition(r => r.RoomId.Equals(roomId), trackChanges)
+        public async Task<IEnumerable<Reservation>> GetReservationsForRoomAsync(Guid roomId, bool trackChanges) =>
+            await FindByCondition(r => r.RoomId.Equals(roomId), trackChanges)
                 .Include(r => r.Customer)
                 .OrderBy(r => r.StartDate)
-                .ToList();
+                .ToListAsync();
         
-        public Reservation GetReservationForRoom(Guid roomId, Guid reservationId, bool trackChanges) =>
-            FindByCondition(r => r.RoomId.Equals(roomId) && r.Id.Equals(reservationId), trackChanges)
-                .Include(r => r.Customer)
-                .SingleOrDefault();
-        
-        public IEnumerable<Reservation> GetReservationsForCustomer(Guid customerId, bool trackChanges) =>
-            FindByCondition(r => r.CustomerId.Equals(customerId), trackChanges)
+        public async Task<IEnumerable<Reservation>> GetReservationsForCustomerAsync(Guid customerId, bool trackChanges) =>
+            await FindByCondition(r => r.CustomerId.Equals(customerId), trackChanges)
                 .Include(r => r.Room)
                 .OrderBy(r => r.StartDate)
-                .ToList();
-        
-        public Reservation GetReservationForCustomer(Guid customerId, Guid reservationId, bool trackChanges) =>
-            FindByCondition(r => r.CustomerId.Equals(customerId) && r.Id.Equals(reservationId), trackChanges)
-                .Include(r => r.Room)
-                .SingleOrDefault();
+                .ToListAsync();
         
         public void CreateReservation(Reservation reservation) => Create(reservation);
         
