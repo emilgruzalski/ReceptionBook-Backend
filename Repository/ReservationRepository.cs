@@ -32,12 +32,14 @@ namespace Repository
         public async Task<IEnumerable<Reservation>> GetReservationsForRoomAsync(Guid roomId, bool trackChanges) =>
             await FindByCondition(r => r.RoomId.Equals(roomId), trackChanges)
                 .Include(r => r.Customer)
+                .Include(r => r.Room)
                 .OrderBy(r => r.StartDate)
                 .ToListAsync();
         
         public async Task<IEnumerable<Reservation>> GetReservationsForCustomerAsync(Guid customerId, bool trackChanges) =>
             await FindByCondition(r => r.CustomerId.Equals(customerId), trackChanges)
                 .Include(r => r.Room)
+                .Include(r => r.Customer)
                 .OrderBy(r => r.StartDate)
                 .ToListAsync();
         
