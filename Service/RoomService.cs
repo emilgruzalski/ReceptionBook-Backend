@@ -4,6 +4,7 @@ using Entities.Exceptions;
 using Entities.Models;
 using Service.Contracts;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
 
 namespace Service
 {
@@ -20,13 +21,12 @@ namespace Service
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<RoomDto>> GetAllRoomsAsync(bool trackChanges)
+        public async Task<(IEnumerable<RoomDto> rooms, MetaData metaData)> GetAllRoomsAsync(bool trackChanges, RoomParameters roomParameters)
         {
-            var rooms = await _repository.Room.GetAllRoomsAsync(trackChanges);
+            var roomsWithMetaData = await _repository.Room.GetAllRoomsAsync(trackChanges, roomParameters);
+            var roomsDto = _mapper.Map<IEnumerable<RoomDto>>(roomsWithMetaData);
 
-            var roomsDto = _mapper.Map<IEnumerable<RoomDto>>(rooms);
-
-            return roomsDto;
+            return (rooms: roomsDto, metaData: roomsWithMetaData.MetaData);
         }
         
         public async Task<RoomDto> GetRoomAsync(Guid id, bool trackChanges)
@@ -65,15 +65,15 @@ namespace Service
             return roomsToReturn;
         }
         
-        public async Task<IEnumerable<RoomDto>> GetAvailableRoomsAsync(AvailableRoomsDto room, bool trackChanges)
+        public async Task<(IEnumerable<RoomDto> rooms, MetaData metaData)> GetAvailableRoomsAsync(AvailableRoomsDto room, RoomParameters roomParameters, bool trackChanges)
         {
             var startDate = room.StartDate;
             var endDate = room.EndDate;
             
-            var roomsEntities = await _repository.Room.GetAvailableRoomsAsync(startDate, endDate, trackChanges);
-            var roomsToReturn = _mapper.Map<IEnumerable<RoomDto>>(roomsEntities);
+            var roomsWithMetaData = await _repository.Room.GetAvailableRoomsAsync(startDate, endDate, roomParameters, trackChanges);
+            var roomsDto = _mapper.Map<IEnumerable<RoomDto>>(roomsWithMetaData);
             
-            return roomsToReturn;
+            return (rooms: roomsDto, metaData: roomsWithMetaData.MetaData);
         }
 
         public async Task<(IEnumerable<RoomDto> rooms, string ids)> CreateRoomCollectionAsync(IEnumerable<RoomForCreationDto> roomCollection)

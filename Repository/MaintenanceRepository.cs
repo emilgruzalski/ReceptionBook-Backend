@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Contracts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Shared.RequestFeatures;
 
 namespace Repository
 {
@@ -15,12 +16,21 @@ namespace Repository
             : base(repositoryContext)
         {
         }
-        
-        public async Task<IEnumerable<Maintenance>> GetMaintenancesAsync(Guid roomId, bool trackChanges) =>
-            await FindByCondition(m => m.RoomId.Equals(roomId), trackChanges)
+
+        public async Task<PagedList<Maintenance>> GetMaintenancesAsync(Guid roomId,
+            MaintenanceParameters maintenanceParameters, bool trackChanges)
+        {
+            var maintenances = await FindByCondition(m => m.RoomId.Equals(roomId), trackChanges)
                 .OrderBy(m => m.StartDate)
+                .Skip((maintenanceParameters.PageNumber - 1) * maintenanceParameters.PageSize)
+                .Take(maintenanceParameters.PageSize)
                 .ToListAsync();
-        
+            
+            var count = await FindByCondition(m => m.RoomId.Equals(roomId), trackChanges).CountAsync();
+            
+            return new PagedList<Maintenance>(maintenances, count, maintenanceParameters.PageNumber, maintenanceParameters.PageSize);
+        }
+
         public async Task<Maintenance> GetMaintenanceAsync(Guid roomId, Guid Id, bool trackChanges) =>
             await FindByCondition(m => m.RoomId.Equals(roomId) && m.Id.Equals(Id), trackChanges)
                 .SingleOrDefaultAsync();

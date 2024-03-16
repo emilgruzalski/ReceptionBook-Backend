@@ -1,0 +1,5 @@
+
+•csharpsquid:S927 "LRename parameter 'reservationId' to 'Id' to match the interface declaration.(…ª¬Š8ˆ»ÔÈä1J$2c921660-f7e2-4978-9c22-d463abfceaa8
+šcsharpsquid:S927^"LRename parameter 'reservationId' to 'Id' to match the interface declaration.(šÀ¨úıÿÿÿÿ8ˆ»ÔÈä1J$5729f930-49f0-4584-82ae-42f27f8f8c4e
+šcsharpsquid:S927h"LRename parameter 'reservationId' to 'Id' to match the interface declaration.(°…îÿÿÿÿÿ8ˆ»ÔÈä1J$d6ecd093-aa55-47ca-8ffb-82316518416d
+ csharpsquid:S4487"QRemove this unread private field '_logger' or refactor the code to use its value.(ŠÖÊ‰şÿÿÿÿ8‰»ÔÈä1J$b5cafb65-eac6-4041-b110-b1ca987071d4

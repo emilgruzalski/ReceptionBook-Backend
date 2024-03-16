@@ -1,0 +1,5 @@
+
+csharpsquid:S927)"ARename parameter 'id' to 'Id' to match the interface declaration.(äØøÆúÿÿÿÿ8Î¹ÔÈä1J$e872508a-e5af-4072-afdb-f778fd0d4f9d
+¦csharpsquid:S9278"^Rename parameter 'maintenanceForCreation' to 'maintenance' to match the interface declaration.(‹Ã’v8Î¹ÔÈä1J$04f3093f-6c0e-444b-af0c-40a2a49e5565
+ªcsharpsquid:S927Y"\Rename parameter 'maintenanceForUpdate' to 'maintenance' to match the interface declaration.(ŞÜÚ›üÿÿÿÿ8Î¹ÔÈä1J$6c273dc3-ad54-4c70-a2d3-658d79492cbe
+ csharpsquid:S4487"QRemove this unread private field '_logger' or refactor the code to use its value.(ŠÖÊ‰şÿÿÿÿ8Î¹ÔÈä1J$6e9cc8ed-1d9c-415a-81c6-c7d54fcb4502

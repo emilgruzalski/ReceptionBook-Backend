@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using ReceptionBook.Presentation.ModelBinders;
 using Service.Contracts;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
 
 namespace ReceptionBook.Presentation.Controllers;
 
@@ -14,11 +16,13 @@ public class CustomersController : ControllerBase
     public CustomersController(IServiceManager service) => _service = service;
     
     [HttpGet]
-    public async Task<IActionResult> GetCustomers()
+    public async Task<IActionResult> GetCustomers([FromQuery] CustomerParameters customerParameters)
     {
-        var customers = await _service.CustomerService.GetAllCustomersAsync(trackChanges: false);
+        var pagedResult = await _service.CustomerService.GetAllCustomersAsync(trackChanges: false, customerParameters);
         
-        return Ok(customers);
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+        
+        return Ok(pagedResult.customers);
     }
     
     [HttpGet("{id:guid}", Name = "CustomerById")]
@@ -85,10 +89,12 @@ public class CustomersController : ControllerBase
     }
     
     [HttpGet("{customerId}/reservations")]
-    public async Task<IActionResult> GetReservationsForCustomer(Guid customerId)
+    public async Task<IActionResult> GetReservationsForCustomer(Guid customerId, [FromQuery] ReservationParameters reservationParameters)
     {
-        var reservations = await _service.ReservationService.GetReservationsForCustomerAsync(customerId, trackChanges: false);
+        var pagedResult = await _service.ReservationService.GetReservationsForCustomerAsync(customerId, reservationParameters, trackChanges: false);
         
-        return Ok(reservations);
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+        
+        return Ok(pagedResult.reservations);
     }
 }

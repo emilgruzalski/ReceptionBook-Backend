@@ -4,6 +4,7 @@ using Entities.Exceptions;
 using Entities.Models;
 using Service.Contracts;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
 
 namespace Service
 {
@@ -20,10 +21,12 @@ namespace Service
             _mapper = mapper;
         }
         
-        public async Task<IEnumerable<ReservationDto>> GetAllReservationsAsync(bool trackChanges)
+        public async Task<(IEnumerable<ReservationDto> reservations, MetaData metaData)> GetAllReservationsAsync(bool trackChanges, ReservationParameters reservationParameters)
         {
-            var reservations = await _repository.Reservation.GetAllReservationsAsync(trackChanges);
-            return _mapper.Map<IEnumerable<ReservationDto>>(reservations);
+            var reservationsWithMetaData = await _repository.Reservation.GetAllReservationsAsync(trackChanges, reservationParameters);
+            var reservationsDto = _mapper.Map<IEnumerable<ReservationDto>>(reservationsWithMetaData);
+            
+            return (reservations: reservationsDto, metaData: reservationsWithMetaData.MetaData);
         }
         
         public async Task<ReservationDto> GetReservationAsync(Guid reservationId, bool trackChanges)
@@ -35,24 +38,28 @@ namespace Service
             return _mapper.Map<ReservationDto>(reservation);
         }
         
-        public async Task<IEnumerable<ReservationDto>> GetReservationsForRoomAsync(Guid roomId, bool trackChanges)
+        public async Task<(IEnumerable<ReservationDto> reservations, MetaData metaData)> GetReservationsForRoomAsync(Guid roomId, ReservationParameters reservationParameters, bool trackChanges)
         {
             var room = await _repository.Room.GetRoomAsync(roomId, trackChanges);
             if (room is null)
                 throw new RoomNotFoundException(roomId);
             
-            var reservations = await _repository.Reservation.GetReservationsForRoomAsync(roomId, trackChanges);
-            return _mapper.Map<IEnumerable<ReservationDto>>(reservations);
+            var reservationsWithMetaData = await _repository.Reservation.GetReservationsForRoomAsync(roomId, reservationParameters, trackChanges);
+            var reservationsDto = _mapper.Map<IEnumerable<ReservationDto>>(reservationsWithMetaData);
+            
+            return (reservations: reservationsDto, metaData: reservationsWithMetaData.MetaData);
         }
         
-        public async Task<IEnumerable<ReservationDto>> GetReservationsForCustomerAsync(Guid customerId, bool trackChanges)
+        public async Task<(IEnumerable<ReservationDto> reservations, MetaData metaData)> GetReservationsForCustomerAsync(Guid customerId, ReservationParameters reservationParameters, bool trackChanges)
         {
             var customer = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);
             if (customer is null)
                 throw new CustomerNotFoundException(customerId);
             
-            var reservations = await _repository.Reservation.GetReservationsForCustomerAsync(customerId, trackChanges);
-            return _mapper.Map<IEnumerable<ReservationDto>>(reservations);
+            var reservationsWithMetaData = await _repository.Reservation.GetReservationsForCustomerAsync(customerId, reservationParameters, trackChanges);
+            var reservationsDto = _mapper.Map<IEnumerable<ReservationDto>>(reservationsWithMetaData);
+            
+            return (reservations: reservationsDto, metaData: reservationsWithMetaData.MetaData);
         }
         
         public async Task<ReservationDto> CreateReservationAsync(ReservationForCreationDto reservation)
@@ -103,12 +110,15 @@ namespace Service
             var room = await _repository.Room.GetRoomWithDetailsAsync(reservation.RoomId, false);
             if (room is null)
                 throw new RoomNotFoundException(reservation.RoomId);
-            
-            if (room.Reservations.Any(r => r.StartDate <= reservation.EndDate && r.EndDate >= reservation.StartDate && r.Status != "Cancelled" && r.Id != reservationId))
-                throw new RoomAlreadyReservedException(reservation.RoomId, reservation.StartDate, reservation.EndDate);
-            
-            if (room.Maintenances.Any(m => m.StartDate <= reservation.EndDate && m.EndDate >= reservation.StartDate))
-                throw new RoomUnderMaintenanceException(reservation.RoomId, reservation.StartDate, reservation.EndDate);
+
+            if (reservation.Status != "Cancelled")
+            {
+                if (room.Reservations.Any(r => r.StartDate <= reservation.EndDate && r.EndDate >= reservation.StartDate && r.Status != "Cancelled" && r.Id != reservationId))
+                    throw new RoomAlreadyReservedException(reservation.RoomId, reservation.StartDate, reservation.EndDate);
+                            
+                if (room.Maintenances.Any(m => m.StartDate <= reservation.EndDate && m.EndDate >= reservation.StartDate))
+                    throw new RoomUnderMaintenanceException(reservation.RoomId, reservation.StartDate, reservation.EndDate);
+            }
             
             _mapper.Map(reservation, reservationEntity);
             await _repository.SaveAsync();

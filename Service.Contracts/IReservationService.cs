@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
 
 namespace Service.Contracts
 {
     public interface IReservationService
     {
-        Task<IEnumerable<ReservationDto>> GetAllReservationsAsync(bool trackChanges);
+        Task<(IEnumerable<ReservationDto> reservations, MetaData metaData)> GetAllReservationsAsync(bool trackChanges, ReservationParameters reservationParameters);
         Task<ReservationDto> GetReservationAsync(Guid Id, bool trackChanges);
-        Task<IEnumerable<ReservationDto>> GetReservationsForRoomAsync(Guid roomId, bool trackChanges);
-        Task<IEnumerable<ReservationDto>> GetReservationsForCustomerAsync(Guid customerId, bool trackChanges);
+        Task<(IEnumerable<ReservationDto> reservations, MetaData metaData)> GetReservationsForRoomAsync(Guid roomId, ReservationParameters reservationParameters, bool trackChanges);
+        Task<(IEnumerable<ReservationDto> reservations, MetaData metaData)> GetReservationsForCustomerAsync(Guid customerId, ReservationParameters reservationParameters, bool trackChanges);
         Task<ReservationDto> CreateReservationAsync(ReservationForCreationDto reservation);
         Task DeleteReservationAsync(Guid Id, bool trackChanges);
         Task UpdateReservationAsync(Guid Id, ReservationForUpdateDto reservation, bool trackChanges);
