@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
 
 namespace ReceptionBook.Presentation.Controllers;
 
@@ -13,11 +15,13 @@ public class MaintenanceController : ControllerBase
     public MaintenanceController(IServiceManager service) => _service = service;
 
     [HttpGet]
-    public async Task<IActionResult> GetMaintenancesForRoom(Guid roomId)
+    public async Task<IActionResult> GetMaintenancesForRoom(Guid roomId, [FromQuery] MaintenanceParameters maintenanceParameters)
     {
-        var maintenance = await _service.MaintenanceService.GetMaintenancesAsync(roomId, trackChanges: false);
+        var pagedResult = await _service.MaintenanceService.GetMaintenancesAsync(roomId, maintenanceParameters, trackChanges: false);
 
-        return Ok(maintenance);
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+        
+        return Ok(pagedResult.maintenances);
     }
 
     [HttpGet("{id:guid}", Name = "GetMaintenanceForRoom")]

@@ -9,6 +9,7 @@ using Entities.Exceptions;
 using Entities.Models;
 using Service.Contracts;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
 
 namespace Service
 {
@@ -25,16 +26,16 @@ namespace Service
             _mapper = mapper;
         }
         
-        public async Task<IEnumerable<MaintenanceDto>> GetMaintenancesAsync(Guid roomId, bool trackChanges)
+        public async Task<(IEnumerable<MaintenanceDto> maintenances, MetaData metaData)> GetMaintenancesAsync(Guid roomId, MaintenanceParameters maintenanceParameters, bool trackChanges)
         {
             var room = await _repository.Room.GetRoomAsync(roomId, trackChanges);
             if (room is null)
                 throw new RoomNotFoundException(roomId);
             
-            var maintenanceFromDb = await _repository.Maintenance.GetMaintenancesAsync(roomId, trackChanges);
-            var maintenanceDto = _mapper.Map<IEnumerable<MaintenanceDto>>(maintenanceFromDb);
+            var maintenanceWithMetaData = await _repository.Maintenance.GetMaintenancesAsync(roomId, maintenanceParameters, trackChanges);
+            var maintenanceDto = _mapper.Map<IEnumerable<MaintenanceDto>>(maintenanceWithMetaData);
             
-            return maintenanceDto;
+            return (maintenances: maintenanceDto, metaData: maintenanceWithMetaData.MetaData);
         }
 
         public async Task<MaintenanceDto> GetMaintenanceAsync(Guid roomId, Guid id, bool trackChanges)

@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Entities.Models;
+using Shared.RequestFeatures;
 
 namespace Contracts
 {
     public interface IReservationRepository
     {
-        Task<IEnumerable<Reservation>> GetAllReservationsAsync(bool trackChanges);
+        Task<PagedList<Reservation>> GetAllReservationsAsync(bool trackChanges, ReservationParameters reservationParameters);
         Task<Reservation> GetReservationAsync(Guid reservationId, bool trackChanges);
-        Task<IEnumerable<Reservation>> GetReservationsForRoomAsync(Guid roomId, bool trackChanges);
-        Task<IEnumerable<Reservation>> GetReservationsForCustomerAsync(Guid customerId, bool trackChanges);
+        Task<PagedList<Reservation>> GetReservationsForRoomAsync(Guid roomId, ReservationParameters reservationParameters, bool trackChanges);
+        Task<PagedList<Reservation>> GetReservationsForCustomerAsync(Guid customerId, ReservationParameters reservationParameters, bool trackChanges);
         void CreateReservation(Reservation reservation);
         void DeleteReservation(Reservation reservation);
     }

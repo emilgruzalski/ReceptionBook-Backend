@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Entities.Models;
+using Shared.RequestFeatures;
 
 namespace Contracts
 {
     public interface IRoomRepository
     {
-        Task<IEnumerable<Room>> GetAllRoomsAsync(bool trackChanges);
+        Task<PagedList<Room>> GetAllRoomsAsync(bool trackChanges, RoomParameters roomParameters);
         Task<Room> GetRoomAsync(Guid roomId, bool trackChanges);
         void CreateRoom(Room room);
         Task<IEnumerable<Room>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
-        Task<IEnumerable<Room>> GetAvailableRoomsAsync(DateTime startDate, DateTime endDate, bool trackChanges);
+        Task<PagedList<Room>> GetAvailableRoomsAsync(DateTime startDate, DateTime endDate, RoomParameters roomParameters, bool trackChanges);
         Task<Room> GetRoomWithDetailsAsync(Guid roomId, bool trackChanges);
         void DeleteRoom(Room room);
     }

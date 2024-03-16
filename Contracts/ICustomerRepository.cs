@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Entities.Models;
+using Shared.RequestFeatures;
 
 namespace Contracts
 {
     public interface ICustomerRepository
     {
-        Task<IEnumerable<Customer>> GetAllCustomersAsync(bool trackChanges);
+        Task<PagedList<Customer>> GetAllCustomersAsync(bool trackChanges, CustomerParameters customerParameters);
         Task<Customer> GetCustomerAsync(Guid customerId, bool trackChanges);
         void CreateCustomer(Customer customer);
         Task<IEnumerable<Customer>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);

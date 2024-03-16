@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using ReceptionBook.Presentation.ModelBinders;
 using Service.Contracts;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
 
 namespace ReceptionBook.Presentation.Controllers
 {
@@ -14,11 +16,13 @@ namespace ReceptionBook.Presentation.Controllers
         public RoomsController(IServiceManager service) => _service = service;
 
         [HttpGet]
-        public async Task<IActionResult> GetRooms()
+        public async Task<IActionResult> GetRooms([FromQuery] RoomParameters roomParameters)
         {
-            var rooms = await _service.RoomService.GetAllRoomsAsync(trackChanges: false);
+            var pagedResult = await _service.RoomService.GetAllRoomsAsync(trackChanges: false, roomParameters);
 
-            return Ok(rooms);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+            
+            return Ok(pagedResult.rooms);
         }
         
         [HttpGet("{id:guid}", Name = "RoomById")]
@@ -49,13 +53,15 @@ namespace ReceptionBook.Presentation.Controllers
         }
         
         [HttpGet("free")]
-        public async Task<IActionResult> GetFreeRooms(DateTime start, DateTime end, string type)
+        public async Task<IActionResult> GetFreeRooms(DateTime start, DateTime end, string type, [FromQuery] RoomParameters roomParameters)
         {
             var room = new AvailableRoomsDto(type, start, end);
             
-            var freeRooms = await _service.RoomService.GetAvailableRoomsAsync(room, trackChanges: false);
+            var pagedResult = await _service.RoomService.GetAvailableRoomsAsync(room, roomParameters, trackChanges: false);
             
-            return Ok(freeRooms);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+            
+            return Ok(pagedResult.rooms);
         }
         
         [HttpPost("collection")]
@@ -86,11 +92,13 @@ namespace ReceptionBook.Presentation.Controllers
         }
         
         [HttpGet("{roomId}/reservations")]
-        public async Task<IActionResult> GetReservationsForRoom(Guid roomId)
+        public async Task<IActionResult> GetReservationsForRoom(Guid roomId, [FromQuery] ReservationParameters reservationParameters)
         {
-            var reservations = await _service.ReservationService.GetReservationsForRoomAsync(roomId, trackChanges: false);
+            var pagedResult = await _service.ReservationService.GetReservationsForRoomAsync(roomId, reservationParameters, trackChanges: false);
         
-            return Ok(reservations);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+            
+            return Ok(pagedResult.reservations);
         }
     }
 }
