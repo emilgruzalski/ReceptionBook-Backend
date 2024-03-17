@@ -1,5 +1,0 @@
-
-“csharpsquid:S927 "ERename parameter 'id' to 'roomId' to match the interface declaration.(¢ÝÌ“ýÿÿÿÿ8±¼ÔÈä1J$21e9068d-cc07-4f0e-b1a0-cf700ab788df
-“csharpsquid:S927b"ERename parameter 'id' to 'roomId' to match the interface declaration.(ÆÚ°ºùÿÿÿÿ8±¼ÔÈä1J$67673a5b-fb5b-411b-bef8-ee461005f694
-Žcsharpsquid:S927l"ERename parameter 'id' to 'roomId' to match the interface declaration.(ª„ŸÞ8±¼ÔÈä1J$1efa7f2c-f8ca-4286-9f85-d6b967d43a82
- csharpsquid:S4487"QRemove this unread private field '_logger' or refactor the code to use its value.(ŠÖÊ‰þÿÿÿÿ8±¼ÔÈä1J$278be44e-51c5-4625-8d25-ac6ec848b236

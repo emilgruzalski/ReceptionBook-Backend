@@ -7,19 +7,19 @@ services:
       context: .
       dockerfile: ReceptionBook/Dockerfile
     depends_on:
-      - receptionbook.db
+      - db
 
-  receptionbook.db:
+  db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     restart: always
     environment:
       ACCEPT_EULA: Y
-      SA_PASSWORD: "YourStrong!Passw0rd"
+      MSSQL_SA_PASSWORD: "YourStrong!Passw0rd"
       MSSQL_PID: "Express"
     ports:
       - "1433:1433"
     volumes:
-      - receptionbook.db-data:/var/opt/mssql
+      - db-data:/var/opt/mssql
 
 volumes:
-  receptionbook.db-data:
+  db-data:
