@@ -14,7 +14,7 @@ namespace Contracts
         Task<Room> GetRoomAsync(Guid roomId, bool trackChanges);
         void CreateRoom(Room room);
         Task<IEnumerable<Room>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
-        Task<PagedList<Room>> GetAvailableRoomsAsync(DateTime startDate, DateTime endDate, RoomParameters roomParameters, bool trackChanges);
+        Task<PagedList<Room>> GetAvailableRoomsAsync(AvailableRoomParameters roomParameters, bool trackChanges);
         Task<Room> GetRoomWithDetailsAsync(Guid roomId, bool trackChanges);
         void DeleteRoom(Room room);
     }
