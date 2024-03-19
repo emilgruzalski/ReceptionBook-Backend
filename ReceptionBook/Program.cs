@@ -3,6 +3,7 @@ using NLog;
 using ReceptionBook;
 using ReceptionBook.Extensions;
 using Contracts;
+using Repository;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -64,4 +65,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+app.MigrateDatabase().Run();

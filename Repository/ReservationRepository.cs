@@ -20,15 +20,33 @@ namespace Repository
         public async Task<PagedList<Reservation>> GetAllReservationsAsync(bool trackChanges,
             ReservationParameters reservationParameters)
         {
-            var reservations = await FindAll(trackChanges)
-                .Include(r => r.Customer)
-                .Include(r => r.Room)
-                .OrderBy(r => r.StartDate)
-                .Skip((reservationParameters.PageNumber - 1) * reservationParameters.PageSize)
-                .Take(reservationParameters.PageSize)
-                .ToListAsync();
-            
-            var count = await FindAll(trackChanges).CountAsync();
+            List<Reservation>? reservations;
+            int count;
+
+            if (reservationParameters.Status == null)
+            {
+                reservations = await FindAll(trackChanges)
+                    .Include(r => r.Customer)
+                    .Include(r => r.Room)
+                    .OrderBy(r => r.StartDate)
+                    .Skip((reservationParameters.PageNumber - 1) * reservationParameters.PageSize)
+                    .Take(reservationParameters.PageSize)
+                    .ToListAsync();
+                
+                count = await FindAll(trackChanges).CountAsync();
+            }
+            else
+            {
+                reservations = await FindByCondition(r => r.Status.Equals(reservationParameters.Status), trackChanges)
+                    .Include(r => r.Customer)
+                    .Include(r => r.Room)
+                    .OrderBy(r => r.StartDate)
+                    .Skip((reservationParameters.PageNumber - 1) * reservationParameters.PageSize)
+                    .Take(reservationParameters.PageSize)
+                    .ToListAsync();
+                
+                count = await FindByCondition(r => r.Status.Equals(reservationParameters.Status), trackChanges).CountAsync();
+            }
             
             return new PagedList<Reservation>(reservations, count, reservationParameters.PageNumber, reservationParameters.PageSize);
         }

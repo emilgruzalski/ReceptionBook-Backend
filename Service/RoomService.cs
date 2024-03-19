@@ -65,12 +65,12 @@ namespace Service
             return roomsToReturn;
         }
         
-        public async Task<(IEnumerable<RoomDto> rooms, MetaData metaData)> GetAvailableRoomsAsync(AvailableRoomsDto room, RoomParameters roomParameters, bool trackChanges)
+        public async Task<(IEnumerable<RoomDto> rooms, MetaData metaData)> GetAvailableRoomsAsync(AvailableRoomParameters roomParameters, bool trackChanges)
         {
-            var startDate = room.StartDate;
-            var endDate = room.EndDate;
-            
-            var roomsWithMetaData = await _repository.Room.GetAvailableRoomsAsync(startDate, endDate, roomParameters, trackChanges);
+            if (!roomParameters.ValidDateRange)
+                throw new EndDateRangeBadRequestException();
+
+            var roomsWithMetaData = await _repository.Room.GetAvailableRoomsAsync(roomParameters, trackChanges);
             var roomsDto = _mapper.Map<IEnumerable<RoomDto>>(roomsWithMetaData);
             
             return (rooms: roomsDto, metaData: roomsWithMetaData.MetaData);

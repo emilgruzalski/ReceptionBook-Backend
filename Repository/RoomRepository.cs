@@ -19,13 +19,29 @@ namespace Repository
 
         public async Task<PagedList<Room>> GetAllRoomsAsync(bool trackChanges, RoomParameters roomParameters)
         {
-            var rooms = await FindAll(trackChanges)
+            List<Room> rooms;
+            int count;
+
+            if (roomParameters.Type == null)
+            {
+                rooms = await FindAll(trackChanges)
                 .OrderBy(r => r.Number)
                 .Skip((roomParameters.PageNumber - 1) * roomParameters.PageSize)
                 .Take(roomParameters.PageSize)
                 .ToListAsync();
-            
-            var count = await FindAll(trackChanges).CountAsync();
+
+                count = await FindAll(trackChanges).CountAsync();
+            }
+            else
+            {
+                rooms = await FindByCondition((r => r.Type.Equals(roomParameters.Type)), trackChanges)
+                .OrderBy(r => r.Number)
+                .Skip((roomParameters.PageNumber - 1) * roomParameters.PageSize)
+                .Take(roomParameters.PageSize)
+                .ToListAsync();
+
+                count = await FindByCondition((r => r.Type.Equals(roomParameters.Type)), trackChanges).CountAsync();
+            }
             
             return new PagedList<Room>(rooms, count, roomParameters.PageNumber, roomParameters.PageSize);
         }
@@ -40,24 +56,23 @@ namespace Repository
             await FindByCondition(x => ids.Contains(x.Id), trackChanges)
                 .ToListAsync();
 
-        public async Task<PagedList<Room>> GetAvailableRoomsAsync(DateTime startDate, DateTime endDate,
-            RoomParameters roomParameters, bool trackChanges)
+        public async Task<PagedList<Room>> GetAvailableRoomsAsync(AvailableRoomParameters roomParameters, bool trackChanges)
         {
-            var rooms = await FindByCondition(r => !r.Reservations.Any(res => res.StartDate < endDate &&
-                                                                  res.EndDate > startDate &&
+            var rooms = await FindByCondition(r => !r.Reservations.Any(res => res.StartDate < roomParameters.EndDate &&
+                                                                  res.EndDate > roomParameters.StartDate &&
                                                                   res.Status != "Cancelled") &&
-                                       !r.Maintenances.Any(m => m.StartDate < endDate &&
-                                                                m.EndDate > startDate), trackChanges)
+                                       !r.Maintenances.Any(m => m.StartDate < roomParameters.EndDate &&
+                                                                m.EndDate > roomParameters.StartDate), trackChanges)
                 .OrderBy(r => r.Number)
                 .Skip((roomParameters.PageNumber - 1) * roomParameters.PageSize)
                 .Take(roomParameters.PageSize)
                 .ToListAsync();
 
-            var count = await FindByCondition(r => !r.Reservations.Any(res => res.StartDate < endDate &&
-                                                                              res.EndDate > startDate &&
+            var count = await FindByCondition(r => !r.Reservations.Any(res => res.StartDate < roomParameters.EndDate &&
+                                                                              res.EndDate > roomParameters.StartDate &&
                                                                               res.Status != "Cancelled") &&
-                                                   !r.Maintenances.Any(m => m.StartDate < endDate &&
-                                                                            m.EndDate > startDate), trackChanges)
+                                                   !r.Maintenances.Any(m => m.StartDate < roomParameters.EndDate &&
+                                                                            m.EndDate > roomParameters.StartDate), trackChanges)
                 .CountAsync();
             
             return new PagedList<Room>(rooms, count, roomParameters.PageNumber, roomParameters.PageSize);

@@ -53,11 +53,9 @@ namespace ReceptionBook.Presentation.Controllers
         }
         
         [HttpGet("free")]
-        public async Task<IActionResult> GetFreeRooms(DateTime start, DateTime end, string type, [FromQuery] RoomParameters roomParameters)
-        {
-            var room = new AvailableRoomsDto(type, start, end);
-            
-            var pagedResult = await _service.RoomService.GetAvailableRoomsAsync(room, roomParameters, trackChanges: false);
+        public async Task<IActionResult> GetFreeRooms([FromQuery] AvailableRoomParameters roomParameters)
+        {   
+            var pagedResult = await _service.RoomService.GetAvailableRoomsAsync(roomParameters, trackChanges: false);
             
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
             
