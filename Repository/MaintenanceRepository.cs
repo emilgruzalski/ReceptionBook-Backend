@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Contracts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Repository.Extensions;
 using Shared.RequestFeatures;
 
 namespace Repository
@@ -21,6 +22,7 @@ namespace Repository
             MaintenanceParameters maintenanceParameters, bool trackChanges)
         {
             var maintenances = await FindByCondition(m => m.RoomId.Equals(roomId), trackChanges)
+                .Search(maintenanceParameters.SearchTerm)
                 .OrderBy(m => m.StartDate)
                 .Skip((maintenanceParameters.PageNumber - 1) * maintenanceParameters.PageSize)
                 .Take(maintenanceParameters.PageSize)

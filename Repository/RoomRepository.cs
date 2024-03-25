@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Contracts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Repository.Extensions;
 using Shared.RequestFeatures;
 
 namespace Repository
@@ -19,36 +20,22 @@ namespace Repository
 
         public async Task<PagedList<Room>> GetAllRoomsAsync(bool trackChanges, RoomParameters roomParameters)
         {
-            List<Room> rooms;
-            int count;
-
-            if (roomParameters.Type == null)
-            {
-                rooms = await FindAll(trackChanges)
+            var rooms = await FindAll(trackChanges)
+                .FilterByRoomType(roomParameters.Type)
+                .Search(roomParameters.SearchTerm)
                 .OrderBy(r => r.Number)
                 .Skip((roomParameters.PageNumber - 1) * roomParameters.PageSize)
                 .Take(roomParameters.PageSize)
                 .ToListAsync();
 
-                count = await FindAll(trackChanges).CountAsync();
-            }
-            else
-            {
-                rooms = await FindByCondition((r => r.Type.Equals(roomParameters.Type)), trackChanges)
-                .OrderBy(r => r.Number)
-                .Skip((roomParameters.PageNumber - 1) * roomParameters.PageSize)
-                .Take(roomParameters.PageSize)
-                .ToListAsync();
-
-                count = await FindByCondition((r => r.Type.Equals(roomParameters.Type)), trackChanges).CountAsync();
-            }
+            var count = await FindAll(trackChanges).FilterByRoomType(roomParameters.Type).Search(roomParameters.SearchTerm).CountAsync();
             
             return new PagedList<Room>(rooms, count, roomParameters.PageNumber, roomParameters.PageSize);
         }
 
         public async Task<Room> GetRoomAsync(Guid roomId, bool trackChanges) =>
             await FindByCondition(r => r.Id.Equals(roomId), trackChanges)
-            .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync();
         
         public void CreateRoom(Room room) => Create(room);
         
@@ -58,22 +45,26 @@ namespace Repository
 
         public async Task<PagedList<Room>> GetAvailableRoomsAsync(AvailableRoomParameters roomParameters, bool trackChanges)
         {
-            var rooms = await FindByCondition(r => !r.Reservations.Any(res => res.StartDate < roomParameters.EndDate &&
-                                                                  res.EndDate > roomParameters.StartDate &&
-                                                                  res.Status != "Cancelled") &&
-                                       !r.Maintenances.Any(m => m.StartDate < roomParameters.EndDate &&
-                                                                m.EndDate > roomParameters.StartDate), trackChanges)
-                .OrderBy(r => r.Number)
-                .Skip((roomParameters.PageNumber - 1) * roomParameters.PageSize)
-                .Take(roomParameters.PageSize)
-                .ToListAsync();
+            var rooms = await FindByCondition(r => !r.Reservations.Any(res => res.StartDate < roomParameters.EndDate && 
+                    res.EndDate > roomParameters.StartDate && 
+                    res.Status != "Cancelled") && 
+                    !r.Maintenances.Any(m => m.StartDate < roomParameters.EndDate && 
+                    m.EndDate > roomParameters.StartDate), trackChanges)
+                    .FilterByRoomType(roomParameters.Type)
+                    .Search(roomParameters.SearchTerm)
+                    .OrderBy(r => r.Number)
+                    .Skip((roomParameters.PageNumber - 1) * roomParameters.PageSize)
+                    .Take(roomParameters.PageSize)
+                    .ToListAsync();
 
             var count = await FindByCondition(r => !r.Reservations.Any(res => res.StartDate < roomParameters.EndDate &&
-                                                                              res.EndDate > roomParameters.StartDate &&
-                                                                              res.Status != "Cancelled") &&
-                                                   !r.Maintenances.Any(m => m.StartDate < roomParameters.EndDate &&
-                                                                            m.EndDate > roomParameters.StartDate), trackChanges)
-                .CountAsync();
+                    res.EndDate > roomParameters.StartDate &&
+                    res.Status != "Cancelled") &&
+                    !r.Maintenances.Any(m => m.StartDate < roomParameters.EndDate &&
+                    m.EndDate > roomParameters.StartDate), trackChanges)
+                    .FilterByRoomType(roomParameters.Type)
+                    .Search(roomParameters.SearchTerm)
+                    .CountAsync();
             
             return new PagedList<Room>(rooms, count, roomParameters.PageNumber, roomParameters.PageSize);
         }

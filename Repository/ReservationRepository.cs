@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Contracts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Repository.Extensions;
 using Shared.RequestFeatures;
 
 namespace Repository
@@ -20,33 +21,17 @@ namespace Repository
         public async Task<PagedList<Reservation>> GetAllReservationsAsync(bool trackChanges,
             ReservationParameters reservationParameters)
         {
-            List<Reservation>? reservations;
-            int count;
-
-            if (reservationParameters.Status == null)
-            {
-                reservations = await FindAll(trackChanges)
-                    .Include(r => r.Customer)
-                    .Include(r => r.Room)
-                    .OrderBy(r => r.StartDate)
-                    .Skip((reservationParameters.PageNumber - 1) * reservationParameters.PageSize)
-                    .Take(reservationParameters.PageSize)
-                    .ToListAsync();
+            var reservations = await FindAll(trackChanges)
+                .FilterByStatus(reservationParameters.Status)
+                .Search(reservationParameters.SearchTerm)
+                .Include(r => r.Customer)
+                .Include(r => r.Room)
+                .OrderBy(r => r.StartDate)
+                .Skip((reservationParameters.PageNumber - 1) * reservationParameters.PageSize)
+                .Take(reservationParameters.PageSize)
+                .ToListAsync();
                 
-                count = await FindAll(trackChanges).CountAsync();
-            }
-            else
-            {
-                reservations = await FindByCondition(r => r.Status.Equals(reservationParameters.Status), trackChanges)
-                    .Include(r => r.Customer)
-                    .Include(r => r.Room)
-                    .OrderBy(r => r.StartDate)
-                    .Skip((reservationParameters.PageNumber - 1) * reservationParameters.PageSize)
-                    .Take(reservationParameters.PageSize)
-                    .ToListAsync();
-                
-                count = await FindByCondition(r => r.Status.Equals(reservationParameters.Status), trackChanges).CountAsync();
-            }
+            var count = await FindAll(trackChanges).FilterByStatus(reservationParameters.Status).Search(reservationParameters.SearchTerm).CountAsync();
             
             return new PagedList<Reservation>(reservations, count, reservationParameters.PageNumber, reservationParameters.PageSize);
         }
