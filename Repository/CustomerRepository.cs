@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Contracts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Repository.Extensions;
 using Shared.RequestFeatures;
 
 namespace Repository
@@ -21,6 +22,7 @@ namespace Repository
             CustomerParameters customerParameters)
         {
             var customers = await FindAll(trackChanges)
+                .Search(customerParameters.SearchTerm)
                 .OrderBy(c => c.FirstName)
                 .Skip((customerParameters.PageNumber - 1) * customerParameters.PageSize)
                 .Take(customerParameters.PageSize)
