@@ -13,16 +13,14 @@ services:
      - "5001:8081"
 
   db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: postgres:15.6
     restart: always
     environment:
-      ACCEPT_EULA: Y
-      MSSQL_SA_PASSWORD: "YourStrong!Passw0rd"
-      MSSQL_PID: "Express"
+      POSTGRES_PASSWORD: "YourStrong!Passw0rd"
     ports:
-      - "1433:1433"
+      - "5432:5432"
     volumes:
-      - db-data:/var/opt/mssql
+      - pgdata:/var/lib/postgresql/data
 
 volumes:
-  db-data:
+  pgdata:

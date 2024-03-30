@@ -15,11 +15,11 @@ namespace ReceptionBook.Migrations
                 name: "Customers",
                 columns: table => new
                 {
-                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
+                    CustomerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    FirstName = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    LastName = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
+                    Email = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -30,10 +30,10 @@ namespace ReceptionBook.Migrations
                 name: "Rooms",
                 columns: table => new
                 {
-                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Number = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    RoomId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Number = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: false),
+                    Type = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,12 +44,12 @@ namespace ReceptionBook.Migrations
                 name: "Maintenance",
                 columns: table => new
                 {
-                    MaintenanceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    MaintenanceId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StartDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    EndDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Cost = table.Column<decimal>(type: "numeric", nullable: false),
+                    RoomId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -66,13 +66,13 @@ namespace ReceptionBook.Migrations
                 name: "Reservations",
                 columns: table => new
                 {
-                    ReservationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ReservationId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StartDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    EndDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    Status = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "numeric", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoomId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,7 +81,8 @@ namespace ReceptionBook.Migrations
                         name: "FK_Reservations_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "CustomerId");
+                        principalColumn: "CustomerId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reservations_Rooms_RoomId",
                         column: x => x.RoomId,

@@ -22,16 +22,16 @@ namespace Repository
             ReservationParameters reservationParameters)
         {
             var reservations = await FindAll(trackChanges)
-                .FilterByStatus(reservationParameters.Status)
+                .FilterReservations(reservationParameters.Status)
                 .Search(reservationParameters.SearchTerm)
                 .Include(r => r.Customer)
                 .Include(r => r.Room)
-                .OrderBy(r => r.StartDate)
+                .Sort(reservationParameters.OrderBy)
                 .Skip((reservationParameters.PageNumber - 1) * reservationParameters.PageSize)
                 .Take(reservationParameters.PageSize)
                 .ToListAsync();
                 
-            var count = await FindAll(trackChanges).FilterByStatus(reservationParameters.Status).Search(reservationParameters.SearchTerm).CountAsync();
+            var count = await FindAll(trackChanges).FilterReservations(reservationParameters.Status).Search(reservationParameters.SearchTerm).CountAsync();
             
             return new PagedList<Reservation>(reservations, count, reservationParameters.PageNumber, reservationParameters.PageSize);
         }
@@ -48,7 +48,7 @@ namespace Repository
             var reservations = await FindByCondition(r => r.RoomId.Equals(roomId), trackChanges)
                 .Include(r => r.Customer)
                 .Include(r => r.Room)
-                .OrderBy(r => r.StartDate)
+                .Sort(reservationParameters.OrderBy)
                 .Skip((reservationParameters.PageNumber - 1) * reservationParameters.PageSize)
                 .Take(reservationParameters.PageSize)
                 .ToListAsync();
@@ -64,7 +64,7 @@ namespace Repository
             var reservations = await FindByCondition(r => r.CustomerId.Equals(customerId), trackChanges)
                 .Include(r => r.Room)
                 .Include(r => r.Customer)
-                .OrderBy(r => r.StartDate)
+                .Sort(reservationParameters.OrderBy)
                 .Skip((reservationParameters.PageNumber - 1) * reservationParameters.PageSize)
                 .Take(reservationParameters.PageSize)
                 .ToListAsync();

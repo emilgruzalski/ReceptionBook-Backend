@@ -2,8 +2,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repository;
 
 #nullable disable
@@ -17,36 +17,36 @@ namespace ReceptionBook.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Entities.Models.Customer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("CustomerId");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                        .HasColumnType("character varying(40)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                        .HasColumnType("character varying(40)");
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("character varying(20)");
 
                     b.HasKey("Id");
 
@@ -73,25 +73,25 @@ namespace ReceptionBook.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("MaintenanceId");
 
                     b.Property<decimal?>("Cost")
                         .IsRequired()
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly?>("EndDate")
+                        .HasColumnType("date");
 
                     b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 
@@ -103,19 +103,19 @@ namespace ReceptionBook.Migrations
                         new
                         {
                             Id = new Guid("bc1db9a1-8d53-46ab-93f4-e5a9b81e5119"),
-                            Cost = 100m,
+                            Cost = 100.50m,
                             Description = "Broken sink",
-                            EndDate = new DateTime(2024, 2, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EndDate = new DateOnly(2024, 4, 8),
                             RoomId = new Guid("1ef4db57-145b-4b3d-903d-5486a621646e"),
-                            StartDate = new DateTime(2024, 2, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            StartDate = new DateOnly(2024, 4, 1)
                         },
                         new
                         {
                             Id = new Guid("b1bb6af1-f424-411f-9a30-34532015f75d"),
-                            Cost = 250m,
+                            Cost = 249.99m,
                             Description = "Broken window",
                             RoomId = new Guid("9fbbb0c1-a6bb-433c-9520-5a45592f0084"),
-                            StartDate = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            StartDate = new DateOnly(2024, 4, 1)
                         });
                 });
 
@@ -123,29 +123,29 @@ namespace ReceptionBook.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("ReservationId");
 
                     b.Property<Guid?>("CustomerId")
                         .IsRequired()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
 
                     b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -160,9 +160,9 @@ namespace ReceptionBook.Migrations
                         {
                             Id = new Guid("856ebb5e-fa0e-48c7-8d4d-6605e304efaa"),
                             CustomerId = new Guid("4b6693b4-f8bc-41b7-b7b8-4ef5b806335a"),
-                            EndDate = new DateTime(2024, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EndDate = new DateOnly(2024, 4, 7),
                             RoomId = new Guid("a48e654e-7e13-4a3a-83c8-18f179dd9eea"),
-                            StartDate = new DateTime(2024, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartDate = new DateOnly(2024, 4, 5),
                             Status = "Pending",
                             TotalPrice = 200m
                         },
@@ -170,9 +170,9 @@ namespace ReceptionBook.Migrations
                         {
                             Id = new Guid("0857ed5f-98fa-4fdd-b78f-daf6955588a3"),
                             CustomerId = new Guid("109ba8ea-dbf1-4221-99dd-00052b252de2"),
-                            EndDate = new DateTime(2024, 2, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EndDate = new DateOnly(2024, 4, 20),
                             RoomId = new Guid("56625ffa-ef46-461c-8867-2600d87a637a"),
-                            StartDate = new DateTime(2024, 2, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartDate = new DateOnly(2024, 4, 10),
                             Status = "Confirmed",
                             TotalPrice = 2100m
                         });
@@ -182,21 +182,21 @@ namespace ReceptionBook.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("RoomId");
 
                     b.Property<string>("Number")
                         .IsRequired()
                         .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                        .HasColumnType("character varying(5)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("character varying(20)");
 
                     b.HasKey("Id");
 

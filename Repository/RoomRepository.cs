@@ -21,14 +21,14 @@ namespace Repository
         public async Task<PagedList<Room>> GetAllRoomsAsync(bool trackChanges, RoomParameters roomParameters)
         {
             var rooms = await FindAll(trackChanges)
-                .FilterByRoomType(roomParameters.Type)
+                .FilterRooms(roomParameters.Type)
                 .Search(roomParameters.SearchTerm)
-                .OrderBy(r => r.Number)
+                .Sort(roomParameters.OrderBy)
                 .Skip((roomParameters.PageNumber - 1) * roomParameters.PageSize)
                 .Take(roomParameters.PageSize)
                 .ToListAsync();
 
-            var count = await FindAll(trackChanges).FilterByRoomType(roomParameters.Type).Search(roomParameters.SearchTerm).CountAsync();
+            var count = await FindAll(trackChanges).FilterRooms(roomParameters.Type).Search(roomParameters.SearchTerm).CountAsync();
             
             return new PagedList<Room>(rooms, count, roomParameters.PageNumber, roomParameters.PageSize);
         }
@@ -50,9 +50,9 @@ namespace Repository
                     res.Status != "Cancelled") && 
                     !r.Maintenances.Any(m => m.StartDate < roomParameters.EndDate && 
                     m.EndDate > roomParameters.StartDate), trackChanges)
-                    .FilterByRoomType(roomParameters.Type)
+                    .FilterRooms(roomParameters.Type)
                     .Search(roomParameters.SearchTerm)
-                    .OrderBy(r => r.Number)
+                    .Sort(roomParameters.OrderBy)
                     .Skip((roomParameters.PageNumber - 1) * roomParameters.PageSize)
                     .Take(roomParameters.PageSize)
                     .ToListAsync();
@@ -62,7 +62,7 @@ namespace Repository
                     res.Status != "Cancelled") &&
                     !r.Maintenances.Any(m => m.StartDate < roomParameters.EndDate &&
                     m.EndDate > roomParameters.StartDate), trackChanges)
-                    .FilterByRoomType(roomParameters.Type)
+                    .FilterRooms(roomParameters.Type)
                     .Search(roomParameters.SearchTerm)
                     .CountAsync();
             

@@ -15,7 +15,7 @@ namespace ReceptionBook.ContextFactory
                 .Build();
 
             var builder = new DbContextOptionsBuilder<RepositoryContext>()
-                .UseSqlServer(configuration.GetConnectionString("sqlConnection"),
+                .UseNpgsql(configuration.GetConnectionString("sqlConnection"),
                     b => b.MigrationsAssembly("ReceptionBook"));
 
             return new RepositoryContext(builder.Options);

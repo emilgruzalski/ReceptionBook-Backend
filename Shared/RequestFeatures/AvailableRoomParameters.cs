@@ -10,9 +10,9 @@ namespace Shared.RequestFeatures
     public class AvailableRoomParameters : RoomParameters
     {
         [Required]
-        public DateTime StartDate { get; set; }
+        public DateOnly StartDate { get; set; }
         [Required]
-        public DateTime EndDate { get; set; }
+        public DateOnly EndDate { get; set; }
 
         public bool ValidDateRange => EndDate > StartDate;
     }
