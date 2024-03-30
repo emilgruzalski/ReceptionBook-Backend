@@ -8,9 +8,9 @@ public abstract record MaintenanceForManipulationDto : IValidatableObject
     public string Description { get; init;}
     
     [Required(ErrorMessage = "Maintenance start date is a required field")]
-    public DateTime StartDate { get; init;}
+    public DateOnly StartDate { get; init;}
     
-    public DateTime EndDate { get; init;}
+    public DateOnly EndDate { get; init;}
     
     [Range(0, (double)decimal.MaxValue, ErrorMessage = "Cost is required and it can't be lower than 0")]
     public Decimal Cost { get; init;}

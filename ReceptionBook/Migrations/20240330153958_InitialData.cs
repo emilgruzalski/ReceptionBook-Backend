@@ -39,8 +39,8 @@ namespace ReceptionBook.Migrations
                 columns: new[] { "MaintenanceId", "Cost", "Description", "EndDate", "RoomId", "StartDate" },
                 values: new object[,]
                 {
-                    { new Guid("b1bb6af1-f424-411f-9a30-34532015f75d"), null, "Broken window", null, new Guid("9fbbb0c1-a6bb-433c-9520-5a45592f0084"), new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { new Guid("bc1db9a1-8d53-46ab-93f4-e5a9b81e5119"), 100m, "Broken sink", new DateTime(2024, 2, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("1ef4db57-145b-4b3d-903d-5486a621646e"), new DateTime(2024, 2, 12, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { new Guid("b1bb6af1-f424-411f-9a30-34532015f75d"), 249.99m, "Broken window", null, new Guid("9fbbb0c1-a6bb-433c-9520-5a45592f0084"), new DateOnly(2024, 4, 1) },
+                    { new Guid("bc1db9a1-8d53-46ab-93f4-e5a9b81e5119"), 100.50m, "Broken sink", new DateOnly(2024, 4, 8), new Guid("1ef4db57-145b-4b3d-903d-5486a621646e"), new DateOnly(2024, 4, 1) }
                 });
 
             migrationBuilder.InsertData(
@@ -48,19 +48,14 @@ namespace ReceptionBook.Migrations
                 columns: new[] { "ReservationId", "CustomerId", "EndDate", "RoomId", "StartDate", "Status", "TotalPrice" },
                 values: new object[,]
                 {
-                    { new Guid("0857ed5f-98fa-4fdd-b78f-daf6955588a3"), new Guid("109ba8ea-dbf1-4221-99dd-00052b252de2"), new DateTime(2024, 2, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("56625ffa-ef46-461c-8867-2600d87a637a"), new DateTime(2024, 2, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Confirmed", 2100m },
-                    { new Guid("856ebb5e-fa0e-48c7-8d4d-6605e304efaa"), null, new DateTime(2024, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("a48e654e-7e13-4a3a-83c8-18f179dd9eea"), new DateTime(2024, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "Pending", 200m }
+                    { new Guid("0857ed5f-98fa-4fdd-b78f-daf6955588a3"), new Guid("109ba8ea-dbf1-4221-99dd-00052b252de2"), new DateOnly(2024, 4, 20), new Guid("56625ffa-ef46-461c-8867-2600d87a637a"), new DateOnly(2024, 4, 10), "Confirmed", 2100m },
+                    { new Guid("856ebb5e-fa0e-48c7-8d4d-6605e304efaa"), new Guid("4b6693b4-f8bc-41b7-b7b8-4ef5b806335a"), new DateOnly(2024, 4, 7), new Guid("a48e654e-7e13-4a3a-83c8-18f179dd9eea"), new DateOnly(2024, 4, 5), "Pending", 200m }
                 });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
-                table: "Customers",
-                keyColumn: "CustomerId",
-                keyValue: new Guid("4b6693b4-f8bc-41b7-b7b8-4ef5b806335a"));
-
             migrationBuilder.DeleteData(
                 table: "Maintenance",
                 keyColumn: "MaintenanceId",
@@ -90,6 +85,11 @@ namespace ReceptionBook.Migrations
                 table: "Customers",
                 keyColumn: "CustomerId",
                 keyValue: new Guid("109ba8ea-dbf1-4221-99dd-00052b252de2"));
+
+            migrationBuilder.DeleteData(
+                table: "Customers",
+                keyColumn: "CustomerId",
+                keyValue: new Guid("4b6693b4-f8bc-41b7-b7b8-4ef5b806335a"));
 
             migrationBuilder.DeleteData(
                 table: "Rooms",

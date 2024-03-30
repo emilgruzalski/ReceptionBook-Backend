@@ -23,7 +23,7 @@ namespace Repository
         {
             var customers = await FindAll(trackChanges)
                 .Search(customerParameters.SearchTerm)
-                .OrderBy(c => c.FirstName)
+                .Sort(customerParameters.OrderBy)
                 .Skip((customerParameters.PageNumber - 1) * customerParameters.PageSize)
                 .Take(customerParameters.PageSize)
                 .ToListAsync();

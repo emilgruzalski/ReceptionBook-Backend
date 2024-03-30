@@ -14,9 +14,9 @@ namespace Entities.Models
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Maintenance start date is a required field.")]
-        public DateTime StartDate { get; set; }
+        public DateOnly StartDate { get; set; }
 
-        public DateTime? EndDate { get; set; }
+        public DateOnly? EndDate { get; set; }
 
         [Required(ErrorMessage = "Maintenance description is a required field.")]
         public string? Description { get; set; }

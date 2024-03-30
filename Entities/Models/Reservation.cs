@@ -14,10 +14,10 @@ namespace Entities.Models
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Reservation start date is a required field.")]
-        public DateTime StartDate { get; set; }
+        public DateOnly StartDate { get; set; }
 
         [Required(ErrorMessage = "Reservation end date is a required field.")]
-        public DateTime EndDate { get; set; }
+        public DateOnly EndDate { get; set; }
 
         [Required(ErrorMessage = "Reservation status is a required field.")]
         [MaxLength(20, ErrorMessage = "Maximum length for the Status is 20 characters.")]

@@ -5,10 +5,10 @@ namespace Shared.DataTransferObjects;
 public abstract record ReservationForManipulationDto : IValidatableObject
 {
     [Required(ErrorMessage = "Reservation start date is a required field")]
-    public DateTime StartDate { get; init; }
+    public DateOnly StartDate { get; init; }
     
     [Required(ErrorMessage = "Reservation end date is a required field")]
-    public DateTime EndDate { get; init; }
+    public DateOnly EndDate { get; init; }
 
     [Required(ErrorMessage = "Reservation status is a required field")]
     [MaxLength(20, ErrorMessage = "Maximum length for the Status is 20 characters.")]

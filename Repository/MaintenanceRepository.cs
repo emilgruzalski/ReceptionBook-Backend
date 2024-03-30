@@ -23,7 +23,7 @@ namespace Repository
         {
             var maintenances = await FindByCondition(m => m.RoomId.Equals(roomId), trackChanges)
                 .Search(maintenanceParameters.SearchTerm)
-                .OrderBy(m => m.StartDate)
+                .Sort(maintenanceParameters.OrderBy)
                 .Skip((maintenanceParameters.PageNumber - 1) * maintenanceParameters.PageSize)
                 .Take(maintenanceParameters.PageSize)
                 .ToListAsync();
