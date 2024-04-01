@@ -8,7 +8,6 @@ namespace Contracts
 {
     public interface IRepositoryManager
     {
-        IMaintenanceRepository Maintenance { get; }
         IReservationRepository Reservation { get; }
         ICustomerRepository Customer { get; }
         IRoomRepository Room { get; }

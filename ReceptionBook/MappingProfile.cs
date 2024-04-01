@@ -13,19 +13,14 @@ namespace ReceptionBook
             CreateMap<RoomForCreationDto, Room>();
             
             CreateMap<RoomForUpdateDto, Room>();
-            
-            CreateMap<Maintenance, MaintenanceDto>();
-            
-            CreateMap<MaintenanceForCreationDto, Maintenance>();
 
-            CreateMap<MaintenanceForUpdateDto, Maintenance>();
+            CreateMap<Room, RoomWithDetailsDto>();
 
             CreateMap<Reservation, ReservationDto>()
                 .ConstructUsing(r => new ReservationDto(
                     r.Id,
                     r.StartDate,
                     r.EndDate,
-                    r.Status,
                     r.TotalPrice,
                     $"{r.Customer.FirstName} {r.Customer.LastName}",
                     r.Room.Number));
@@ -33,12 +28,22 @@ namespace ReceptionBook
             CreateMap<ReservationForCreationDto, Reservation>();
             
             CreateMap<ReservationForUpdateDto, Reservation>();
+
+            CreateMap<Reservation, ReservationWithDetailsDto>();
             
             CreateMap<Customer, CustomerDto>();
             
             CreateMap<CustomerForCreationDto, Customer>();
             
             CreateMap<CustomerForUpdateDto, Customer>();
+
+            CreateMap<Customer, CustomerWithDetalisDto>();
+
+            CreateMap<UserForRegistrationDto, User>();
+
+            CreateMap<User, UserDto>();
+
+            CreateMap<UserForUpdateDto, User>();
         }
     }
 }

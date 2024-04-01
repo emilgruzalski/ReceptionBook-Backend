@@ -11,9 +11,7 @@ namespace Contracts
     public interface IReservationRepository
     {
         Task<PagedList<Reservation>> GetAllReservationsAsync(bool trackChanges, ReservationParameters reservationParameters);
-        Task<Reservation> GetReservationAsync(Guid reservationId, bool trackChanges);
-        Task<PagedList<Reservation>> GetReservationsForRoomAsync(Guid roomId, ReservationParameters reservationParameters, bool trackChanges);
-        Task<PagedList<Reservation>> GetReservationsForCustomerAsync(Guid customerId, ReservationParameters reservationParameters, bool trackChanges);
+        Task<Reservation> GetReservationWithDetailsAsync(Guid reservationId, bool trackChanges);
         void CreateReservation(Reservation reservation);
         void DeleteReservation(Reservation reservation);
     }

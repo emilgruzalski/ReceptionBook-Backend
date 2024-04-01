@@ -31,7 +31,7 @@ namespace Service
         
         public async Task<RoomDto> GetRoomAsync(Guid id, bool trackChanges)
         {
-            var room = await _repository.Room.GetRoomAsync(id, trackChanges);
+            var room = await _repository.Room.GetRoomWithDetailsAsync(id, trackChanges);
             if (room is null)
                 throw new RoomNotFoundException(id);
             
@@ -79,7 +79,7 @@ namespace Service
         public async Task<(IEnumerable<RoomDto> rooms, string ids)> CreateRoomCollectionAsync(IEnumerable<RoomForCreationDto> roomCollection)
         {
             if (roomCollection is null)
-                throw new RoomCollectionBadRequest();
+                throw new RoomCollectionBadRequestException();
 
             var roomEntities = _mapper.Map<IEnumerable<Room>>(roomCollection);
             foreach (var room in roomEntities)
@@ -97,7 +97,7 @@ namespace Service
         
         public async Task DeleteRoomAsync(Guid id, bool trackChanges)
         {
-            var room = await _repository.Room.GetRoomAsync(id, trackChanges);
+            var room = await _repository.Room.GetRoomWithDetailsAsync(id, trackChanges);
             if (room is null)
                 throw new RoomNotFoundException(id);
             
@@ -107,7 +107,7 @@ namespace Service
         
         public async Task UpdateRoomAsync(Guid id, RoomForUpdateDto room, bool trackChanges)
         {
-            var roomEntity = await _repository.Room.GetRoomAsync(id, trackChanges);
+            var roomEntity = await _repository.Room.GetRoomWithDetailsAsync(id, trackChanges);
             if (roomEntity is null)
                 throw new RoomNotFoundException(id);
             

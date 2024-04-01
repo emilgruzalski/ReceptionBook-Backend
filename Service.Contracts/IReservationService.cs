@@ -12,8 +12,6 @@ namespace Service.Contracts
     {
         Task<(IEnumerable<ReservationDto> reservations, MetaData metaData)> GetAllReservationsAsync(bool trackChanges, ReservationParameters reservationParameters);
         Task<ReservationDto> GetReservationAsync(Guid Id, bool trackChanges);
-        Task<(IEnumerable<ReservationDto> reservations, MetaData metaData)> GetReservationsForRoomAsync(Guid roomId, ReservationParameters reservationParameters, bool trackChanges);
-        Task<(IEnumerable<ReservationDto> reservations, MetaData metaData)> GetReservationsForCustomerAsync(Guid customerId, ReservationParameters reservationParameters, bool trackChanges);
         Task<ReservationDto> CreateReservationAsync(ReservationForCreationDto reservation);
         Task DeleteReservationAsync(Guid Id, bool trackChanges);
         Task UpdateReservationAsync(Guid Id, ReservationForUpdateDto reservation, bool trackChanges);

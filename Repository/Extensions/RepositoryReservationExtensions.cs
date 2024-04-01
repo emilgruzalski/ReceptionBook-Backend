@@ -24,14 +24,6 @@ namespace Repository.Extensions
                                                                                               
         }
 
-        public static IQueryable<Reservation> FilterReservations(this IQueryable<Reservation> reservations, string? Status)
-        {
-            if (string.IsNullOrWhiteSpace(Status))
-                return reservations;
-
-            return reservations.Where(r => r.Status.ToLower().Equals(Status.ToLower()));
-        }
-
         public static IQueryable<Reservation> Sort(this IQueryable<Reservation> reservations, string orderByQueryString)
         {
             if (string.IsNullOrWhiteSpace(orderByQueryString))

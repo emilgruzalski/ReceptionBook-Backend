@@ -13,7 +13,6 @@ namespace Repository
         private readonly Lazy<ICustomerRepository> _customerRepository;
         private readonly Lazy<IRoomRepository> _roomRepository;
         private readonly Lazy<IReservationRepository> _reservationRepository;
-        private readonly Lazy<IMaintenanceRepository> _maintenanceRepository;
 
         public RepositoryManager(RepositoryContext repositoryContext)
         {
@@ -21,13 +20,11 @@ namespace Repository
             _customerRepository = new Lazy<ICustomerRepository>(() => new CustomerRepository(repositoryContext));
             _roomRepository = new Lazy<IRoomRepository>(() => new RoomRepository(repositoryContext));
             _reservationRepository = new Lazy<IReservationRepository>(() => new ReservationRepository(repositoryContext));
-            _maintenanceRepository = new Lazy<IMaintenanceRepository>(() => new MaintenanceRepository(repositoryContext));
         }
 
         public ICustomerRepository Customer => _customerRepository.Value;
         public IRoomRepository Room => _roomRepository.Value;
         public IReservationRepository Reservation => _reservationRepository.Value;
-        public IMaintenanceRepository Maintenance => _maintenanceRepository.Value;
         
         public Task SaveAsync() => _repositoryContext.SaveChangesAsync();
     }

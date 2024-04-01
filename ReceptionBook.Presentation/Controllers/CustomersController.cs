@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReceptionBook.Presentation.ModelBinders;
 using Service.Contracts;
@@ -8,6 +9,7 @@ using Shared.RequestFeatures;
 namespace ReceptionBook.Presentation.Controllers;
 
 [Route("api/customers")]
+//[Authorize(Roles = "Manager")]
 [ApiController]
 public class CustomersController : ControllerBase
 {
@@ -86,15 +88,5 @@ public class CustomersController : ControllerBase
         await _service.CustomerService.UpdateCustomerAsync(id, customer, trackChanges: true);
         
         return NoContent();
-    }
-    
-    [HttpGet("{customerId}/reservations")]
-    public async Task<IActionResult> GetReservationsForCustomer(Guid customerId, [FromQuery] ReservationParameters reservationParameters)
-    {
-        var pagedResult = await _service.ReservationService.GetReservationsForCustomerAsync(customerId, reservationParameters, trackChanges: false);
-        
-        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
-        
-        return Ok(pagedResult.reservations);
     }
 }

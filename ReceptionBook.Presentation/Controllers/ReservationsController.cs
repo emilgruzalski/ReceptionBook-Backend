@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
@@ -7,32 +8,33 @@ using Shared.RequestFeatures;
 namespace ReceptionBook.Presentation.Controllers;
 
 [Route("api/reservations")]
+[Authorize(Roles = "Manager")]
 [ApiController]
 public class ReservationsController : ControllerBase
 {
     private readonly IServiceManager _service;
-    
+
     public ReservationsController(IServiceManager service) => _service = service;
-    
+
     [HttpGet]
     public async Task<IActionResult> GetReservations([FromQuery] ReservationParameters reservationParameters)
     {
         var pagedResult = await _service.ReservationService.GetAllReservationsAsync(trackChanges: false, reservationParameters);
-        
+
         Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
-        
+
         return Ok(pagedResult.reservations);
     }
-    
+
     [HttpGet("{id:guid}", Name = "ReservationById")]
     public async Task<IActionResult> GetReservation(Guid id)
     {
         var reservation = await _service.ReservationService.GetReservationAsync(id, trackChanges: false);
-        
+
         return Ok(reservation);
     }
-    
-    [HttpPost]
+
+    [HttpPost("{id:guid}")]
     public async Task<IActionResult> CreateReservation([FromBody] ReservationForCreationDto reservation)
     {
         if (reservation is null)

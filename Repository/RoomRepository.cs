@@ -32,10 +32,6 @@ namespace Repository
             
             return new PagedList<Room>(rooms, count, roomParameters.PageNumber, roomParameters.PageSize);
         }
-
-        public async Task<Room> GetRoomAsync(Guid roomId, bool trackChanges) =>
-            await FindByCondition(r => r.Id.Equals(roomId), trackChanges)
-                .SingleOrDefaultAsync();
         
         public void CreateRoom(Room room) => Create(room);
         
@@ -45,11 +41,8 @@ namespace Repository
 
         public async Task<PagedList<Room>> GetAvailableRoomsAsync(AvailableRoomParameters roomParameters, bool trackChanges)
         {
-            var rooms = await FindByCondition(r => !r.Reservations.Any(res => res.StartDate < roomParameters.EndDate && 
-                    res.EndDate > roomParameters.StartDate && 
-                    res.Status != "Cancelled") && 
-                    !r.Maintenances.Any(m => m.StartDate < roomParameters.EndDate && 
-                    m.EndDate > roomParameters.StartDate), trackChanges)
+            var rooms = await FindByCondition(r => !r.Reservations.Any(res => res.StartDate <= roomParameters.EndDate && 
+                    res.EndDate >= roomParameters.StartDate), trackChanges)
                     .FilterRooms(roomParameters.Type)
                     .Search(roomParameters.SearchTerm)
                     .Sort(roomParameters.OrderBy)
@@ -57,11 +50,8 @@ namespace Repository
                     .Take(roomParameters.PageSize)
                     .ToListAsync();
 
-            var count = await FindByCondition(r => !r.Reservations.Any(res => res.StartDate < roomParameters.EndDate &&
-                    res.EndDate > roomParameters.StartDate &&
-                    res.Status != "Cancelled") &&
-                    !r.Maintenances.Any(m => m.StartDate < roomParameters.EndDate &&
-                    m.EndDate > roomParameters.StartDate), trackChanges)
+            var count = await FindByCondition(r => !r.Reservations.Any(res => res.StartDate <= roomParameters.EndDate &&
+                    res.EndDate >= roomParameters.StartDate), trackChanges)
                     .FilterRooms(roomParameters.Type)
                     .Search(roomParameters.SearchTerm)
                     .CountAsync();
@@ -72,7 +62,6 @@ namespace Repository
         public async Task<Room> GetRoomWithDetailsAsync(Guid roomId, bool trackChanges) =>
             await FindByCondition(r => r.Id.Equals(roomId), trackChanges)
                 .Include(r => r.Reservations)
-                .Include(r => r.Maintenances)
                 .SingleOrDefaultAsync();
         
         public void DeleteRoom(Room room) => Delete(room);

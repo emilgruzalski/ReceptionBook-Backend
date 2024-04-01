@@ -1,8 +1,8 @@
 ﻿namespace Entities.Exceptions;
 
-public sealed class RoomCollectionBadRequest : BadRequestException
+public sealed class RoomCollectionBadRequestException : BadRequestException
 {
-    public RoomCollectionBadRequest()
+    public RoomCollectionBadRequestException()
         : base("Room collection sent from a client is null.")
     {
     }

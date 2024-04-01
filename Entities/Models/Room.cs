@@ -25,7 +25,5 @@ namespace Entities.Models
         public decimal Price { get; set; }
 
         public ICollection<Reservation>? Reservations { get; set; }
-
-        public ICollection<Maintenance>? Maintenances { get; set; }
     }
 }

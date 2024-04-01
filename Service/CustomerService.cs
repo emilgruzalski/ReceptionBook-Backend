@@ -31,7 +31,7 @@ namespace Service
         
         public async Task<CustomerDto> GetCustomerAsync(Guid customerId, bool trackChanges)
         {
-            var customer = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);
+            var customer = await _repository.Customer.GetCustomerWithDetailsAsync(customerId, trackChanges);
             if (customer is null)
                 throw new CustomerNotFoundException(customerId);
             
@@ -85,7 +85,7 @@ namespace Service
         
         public async Task DeleteCustomerAsync(Guid customerId, bool trackChanges)
         {
-            var customer = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);
+            var customer = await _repository.Customer.GetCustomerWithDetailsAsync(customerId, trackChanges);
             if (customer is null)
                 throw new CustomerNotFoundException(customerId);
             
@@ -95,7 +95,7 @@ namespace Service
 
         public async Task UpdateCustomerAsync(Guid customerId, CustomerForUpdateDto customer, bool trackChanges)
         {
-            var customerEntity = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);
+            var customerEntity = await _repository.Customer.GetCustomerWithDetailsAsync(customerId, trackChanges);
             if (customerEntity is null)
                 throw new CustomerNotFoundException(customerId);
 
