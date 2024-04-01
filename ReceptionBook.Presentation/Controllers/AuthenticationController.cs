@@ -19,7 +19,6 @@ namespace ReceptionBook.Presentation.Controllers
         public AuthenticationController(IServiceManager service) => _service = service;
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDto userForRegistration) 
         { 
             var result = await _service.AuthenticationService.RegisterUser(userForRegistration); 

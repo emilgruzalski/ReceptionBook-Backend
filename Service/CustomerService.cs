@@ -29,13 +29,13 @@ namespace Service
             return (customers: customersDto, metaData: customersWithMetaData.MetaData);
         }
         
-        public async Task<CustomerDto> GetCustomerAsync(Guid customerId, bool trackChanges)
+        public async Task<CustomerWithDetalisDto> GetCustomerAsync(Guid customerId, bool trackChanges)
         {
             var customer = await _repository.Customer.GetCustomerWithDetailsAsync(customerId, trackChanges);
             if (customer is null)
                 throw new CustomerNotFoundException(customerId);
             
-            return _mapper.Map<CustomerDto>(customer);
+            return _mapper.Map<CustomerWithDetalisDto>(customer);
         }
         
         public async Task<CustomerDto> CreateCustomerAsync(CustomerForCreationDto customer)

@@ -11,7 +11,7 @@ namespace Service.Contracts
     public interface ICustomerService
     {
         Task<(IEnumerable<CustomerDto> customers, MetaData metaData)> GetAllCustomersAsync(bool trackChanges, CustomerParameters customerParameters);
-        Task<CustomerDto> GetCustomerAsync(Guid customerId, bool trackChanges);
+        Task<CustomerWithDetalisDto> GetCustomerAsync(Guid customerId, bool trackChanges);
         Task<CustomerDto> CreateCustomerAsync(CustomerForCreationDto customer);
         Task<IEnumerable<CustomerDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
         Task<(IEnumerable<CustomerDto> customers, string ids)> CreateCustomerCollectionAsync(IEnumerable<CustomerForCreationDto> customerCollection);

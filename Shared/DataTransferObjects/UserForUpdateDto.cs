@@ -9,16 +9,12 @@ namespace Shared.DataTransferObjects
 {
     public record UserForUpdateDto
     {
-        [Required]
-        public string Id { get; set; }
-        [Required]
-        [Display(Name = "User Name")]
-        public string UserName { get; set; }
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public ICollection<string>? Roles { get; set; }
+        [Required(ErrorMessage = "Username is required")]
+        public string UserName { get; init; }
+        public string Email { get; init; }
+        public string? FirstName { get; init; }
+        public string? LastName { get; init; }
+        public ICollection<string>? Roles { get; init; }
+        public string? PhoneNumber { get; init; }
     }
 }

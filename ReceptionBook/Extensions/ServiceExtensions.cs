@@ -60,7 +60,7 @@ namespace ReceptionBook.Extensions
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtSettings = configuration.GetSection("JwtSettings");
-            var secretKey = "ReceptionBookSecretKey123456789";
+            var secretKey = "ReceptionBookSecretKey123456789000";
 
             services.AddAuthentication(opt =>
             {

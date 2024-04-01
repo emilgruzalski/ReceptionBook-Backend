@@ -24,6 +24,8 @@ namespace ReceptionBook
                     r.TotalPrice,
                     $"{r.Customer.FirstName} {r.Customer.LastName}",
                     r.Room.Number));
+
+            CreateMap<Reservation, ReservationShortDto>();
             
             CreateMap<ReservationForCreationDto, Reservation>();
             
@@ -37,7 +39,8 @@ namespace ReceptionBook
             
             CreateMap<CustomerForUpdateDto, Customer>();
 
-            CreateMap<Customer, CustomerWithDetalisDto>();
+            CreateMap<Customer, CustomerWithDetalisDto>()
+                .ForSourceMember(c => c.Reservations, opt => opt.DoNotValidate());
 
             CreateMap<UserForRegistrationDto, User>();
 

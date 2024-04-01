@@ -9,7 +9,7 @@ using Shared.RequestFeatures;
 namespace ReceptionBook.Presentation.Controllers
 {
     [Route("api/rooms")]
-    [Authorize(Roles = "Manager")]
+    //[Authorize(Roles = "Manager")]
     [ApiController]
     public class RoomsController : ControllerBase
     {
@@ -18,7 +18,6 @@ namespace ReceptionBook.Presentation.Controllers
         public RoomsController(IServiceManager service) => _service = service;
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetRooms([FromQuery] RoomParameters roomParameters)
         {
             var pagedResult = await _service.RoomService.GetAllRoomsAsync(trackChanges: false, roomParameters);
@@ -55,7 +54,7 @@ namespace ReceptionBook.Presentation.Controllers
             return Ok(rooms);
         }
         
-        [HttpGet("free")]
+        [HttpGet("available")]
         public async Task<IActionResult> GetAvailableRooms([FromQuery] AvailableRoomParameters roomParameters)
         {   
             var pagedResult = await _service.RoomService.GetAvailableRoomsAsync(roomParameters, trackChanges: false);

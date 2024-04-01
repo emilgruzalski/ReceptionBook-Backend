@@ -29,13 +29,13 @@ namespace Service
             return (reservations: reservationsDto, metaData: reservationsWithMetaData.MetaData);
         }
         
-        public async Task<ReservationDto> GetReservationAsync(Guid reservationId, bool trackChanges)
+        public async Task<ReservationWithDetailsDto> GetReservationAsync(Guid reservationId, bool trackChanges)
         {
             var reservation = await _repository.Reservation.GetReservationWithDetailsAsync(reservationId, trackChanges);
             if (reservation is null)
                 throw new ReservationNotFoundException(reservationId);
             
-            return _mapper.Map<ReservationDto>(reservation);
+            return _mapper.Map<ReservationWithDetailsDto>(reservation);
         }
         
         public async Task<ReservationDto> CreateReservationAsync(ReservationForCreationDto reservation)

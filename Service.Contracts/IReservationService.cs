@@ -11,7 +11,7 @@ namespace Service.Contracts
     public interface IReservationService
     {
         Task<(IEnumerable<ReservationDto> reservations, MetaData metaData)> GetAllReservationsAsync(bool trackChanges, ReservationParameters reservationParameters);
-        Task<ReservationDto> GetReservationAsync(Guid Id, bool trackChanges);
+        Task<ReservationWithDetailsDto> GetReservationAsync(Guid Id, bool trackChanges);
         Task<ReservationDto> CreateReservationAsync(ReservationForCreationDto reservation);
         Task DeleteReservationAsync(Guid Id, bool trackChanges);
         Task UpdateReservationAsync(Guid Id, ReservationForUpdateDto reservation, bool trackChanges);

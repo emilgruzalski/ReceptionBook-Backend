@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ReceptionBook.Presentation.Controllers
 {
-    internal class UserController
+    public class UserController
     {
     }
 }

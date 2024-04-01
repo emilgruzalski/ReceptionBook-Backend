@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Shared.DataTransferObjects
 {
-    public record CustomerWithDetalisDto(Guid Id, string FirstName, string LastName, string Email, string PhoneNumber, ICollection<ReservationDto> Reservations);
+    public record CustomerWithDetalisDto(Guid Id, string FirstName, string LastName, string Email, string PhoneNumber, ICollection<ReservationShortDto> Reservations);
 }

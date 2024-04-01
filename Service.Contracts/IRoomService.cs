@@ -6,7 +6,7 @@ namespace Service.Contracts
     public interface IRoomService
     {
         Task<(IEnumerable<RoomDto> rooms, MetaData metaData)> GetAllRoomsAsync(bool trackChanges, RoomParameters roomParameters);
-        Task<RoomDto> GetRoomAsync(Guid roomId, bool trackChanges);
+        Task<RoomWithDetailsDto> GetRoomAsync(Guid roomId, bool trackChanges);
         Task<RoomDto> CreateRoomAsync(RoomForCreationDto room);
         Task<IEnumerable<RoomDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
         Task<(IEnumerable<RoomDto> rooms, MetaData metaData)> GetAvailableRoomsAsync(AvailableRoomParameters roomParameters, bool trackChanges);

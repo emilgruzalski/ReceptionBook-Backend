@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Shared.DataTransferObjects
 {
-    public record UserDto();
+    public record ReservationShortDto(Guid Id, DateOnly StartDate, DateOnly EndDate, Decimal TotalPrice);
 }

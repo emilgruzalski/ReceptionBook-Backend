@@ -29,13 +29,13 @@ namespace Service
             return (rooms: roomsDto, metaData: roomsWithMetaData.MetaData);
         }
         
-        public async Task<RoomDto> GetRoomAsync(Guid id, bool trackChanges)
+        public async Task<RoomWithDetailsDto> GetRoomAsync(Guid id, bool trackChanges)
         {
             var room = await _repository.Room.GetRoomWithDetailsAsync(id, trackChanges);
             if (room is null)
                 throw new RoomNotFoundException(id);
             
-            var roomDto = _mapper.Map<RoomDto>(room);
+            var roomDto = _mapper.Map<RoomWithDetailsDto>(room);
             return roomDto;
         }
         
