@@ -19,10 +19,6 @@ namespace Entities.Models
         [Required(ErrorMessage = "Reservation end date is a required field.")]
         public DateOnly EndDate { get; set; }
 
-        [Required(ErrorMessage = "Reservation status is a required field.")]
-        [MaxLength(20, ErrorMessage = "Maximum length for the Status is 20 characters.")]
-        public string? Status { get; set; }
-
         [Required(ErrorMessage = "Reservation total price is a required field.")]
         public decimal TotalPrice { get; set; }
 

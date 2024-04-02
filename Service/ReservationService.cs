@@ -29,37 +29,13 @@ namespace Service
             return (reservations: reservationsDto, metaData: reservationsWithMetaData.MetaData);
         }
         
-        public async Task<ReservationDto> GetReservationAsync(Guid reservationId, bool trackChanges)
+        public async Task<ReservationWithDetailsDto> GetReservationAsync(Guid reservationId, bool trackChanges)
         {
-            var reservation = await _repository.Reservation.GetReservationAsync(reservationId, trackChanges);
+            var reservation = await _repository.Reservation.GetReservationWithDetailsAsync(reservationId, trackChanges);
             if (reservation is null)
                 throw new ReservationNotFoundException(reservationId);
             
-            return _mapper.Map<ReservationDto>(reservation);
-        }
-        
-        public async Task<(IEnumerable<ReservationDto> reservations, MetaData metaData)> GetReservationsForRoomAsync(Guid roomId, ReservationParameters reservationParameters, bool trackChanges)
-        {
-            var room = await _repository.Room.GetRoomAsync(roomId, trackChanges);
-            if (room is null)
-                throw new RoomNotFoundException(roomId);
-            
-            var reservationsWithMetaData = await _repository.Reservation.GetReservationsForRoomAsync(roomId, reservationParameters, trackChanges);
-            var reservationsDto = _mapper.Map<IEnumerable<ReservationDto>>(reservationsWithMetaData);
-            
-            return (reservations: reservationsDto, metaData: reservationsWithMetaData.MetaData);
-        }
-        
-        public async Task<(IEnumerable<ReservationDto> reservations, MetaData metaData)> GetReservationsForCustomerAsync(Guid customerId, ReservationParameters reservationParameters, bool trackChanges)
-        {
-            var customer = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);
-            if (customer is null)
-                throw new CustomerNotFoundException(customerId);
-            
-            var reservationsWithMetaData = await _repository.Reservation.GetReservationsForCustomerAsync(customerId, reservationParameters, trackChanges);
-            var reservationsDto = _mapper.Map<IEnumerable<ReservationDto>>(reservationsWithMetaData);
-            
-            return (reservations: reservationsDto, metaData: reservationsWithMetaData.MetaData);
+            return _mapper.Map<ReservationWithDetailsDto>(reservation);
         }
         
         public async Task<ReservationDto> CreateReservationAsync(ReservationForCreationDto reservation)
@@ -68,13 +44,10 @@ namespace Service
             if (room is null)
                 throw new RoomNotFoundException(reservation.RoomId);
             
-            if (room.Reservations.Any(r => r.StartDate <= reservation.EndDate && r.EndDate >= reservation.StartDate && r.Status != "Cancelled"))
-                throw new RoomAlreadyReservedException(reservation.RoomId, reservation.StartDate, reservation.EndDate);
+            if (room.Reservations.Any(r => r.StartDate <= reservation.EndDate && r.EndDate >= reservation.StartDate))
+                throw new RoomIsReservedException(reservation.RoomId);
             
-            if (room.Maintenances.Any(m => m.StartDate <= reservation.EndDate && m.EndDate >= reservation.StartDate))
-                throw new RoomUnderMaintenanceException(reservation.RoomId, reservation.StartDate, reservation.EndDate);
-            
-            var customer = await _repository.Customer.GetCustomerAsync(reservation.CustomerId, false);
+            var customer = await _repository.Customer.GetCustomerWithDetailsAsync(reservation.CustomerId, false);
             if (customer is null)
                 throw new CustomerNotFoundException(reservation.CustomerId);
             
@@ -93,7 +66,7 @@ namespace Service
 
         public async Task DeleteReservationAsync(Guid reservationId, bool trackChanges)
         {
-            var reservation = await _repository.Reservation.GetReservationAsync(reservationId, trackChanges);
+            var reservation = await _repository.Reservation.GetReservationWithDetailsAsync(reservationId, trackChanges);
             if (reservation is null)
                 throw new ReservationNotFoundException(reservationId);
 
@@ -103,7 +76,7 @@ namespace Service
         
         public async Task UpdateReservationAsync(Guid reservationId, ReservationForUpdateDto reservation, bool trackChanges)
         {
-            var reservationEntity = await _repository.Reservation.GetReservationAsync(reservationId, trackChanges);
+            var reservationEntity = await _repository.Reservation.GetReservationWithDetailsAsync(reservationId, trackChanges);
             if (reservationEntity is null)
                 throw new ReservationNotFoundException(reservationId);
             
@@ -113,11 +86,8 @@ namespace Service
 
             if (reservation.Status != "Cancelled")
             {
-                if (room.Reservations.Any(r => r.StartDate <= reservation.EndDate && r.EndDate >= reservation.StartDate && r.Status != "Cancelled" && r.Id != reservationId))
-                    throw new RoomAlreadyReservedException(reservation.RoomId, reservation.StartDate, reservation.EndDate);
-                            
-                if (room.Maintenances.Any(m => m.StartDate <= reservation.EndDate && m.EndDate >= reservation.StartDate))
-                    throw new RoomUnderMaintenanceException(reservation.RoomId, reservation.StartDate, reservation.EndDate);
+                if (room.Reservations.Any(r => r.StartDate <= reservation.EndDate && r.EndDate >= reservation.StartDate && r.Id != reservationId))
+                    throw new RoomIsReservedException(reservation.RoomId);
             }
             
             _mapper.Map(reservation, reservationEntity);

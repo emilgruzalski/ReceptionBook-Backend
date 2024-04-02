@@ -33,9 +33,14 @@ namespace Repository
             return new PagedList<Customer>(customers, count, customerParameters.PageNumber, customerParameters.PageSize);
         }
 
-        public async Task<Customer> GetCustomerAsync(Guid customerId, bool trackChanges) =>
+        public async Task<Customer> GetCustomerWithDetailsAsync(Guid customerId, bool trackChanges) =>
             await FindByCondition(c => c.Id.Equals(customerId), trackChanges)
+                .Include(c => c.Reservations)
                 .SingleOrDefaultAsync();
+
+        public async Task<IEnumerable<Customer>> GetCustomersIdsAsync(bool trackChanges) =>
+            await FindAll(trackChanges)
+                .ToListAsync();
         
         public void CreateCustomer(Customer customer) => Create(customer);
         

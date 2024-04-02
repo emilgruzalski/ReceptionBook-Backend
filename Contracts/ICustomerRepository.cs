@@ -11,7 +11,8 @@ namespace Contracts
     public interface ICustomerRepository
     {
         Task<PagedList<Customer>> GetAllCustomersAsync(bool trackChanges, CustomerParameters customerParameters);
-        Task<Customer> GetCustomerAsync(Guid customerId, bool trackChanges);
+        Task<Customer> GetCustomerWithDetailsAsync(Guid customerId, bool trackChanges);
+        Task<IEnumerable<Customer>> GetCustomersIdsAsync(bool trackChanges);
         void CreateCustomer(Customer customer);
         Task<IEnumerable<Customer>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
         void DeleteCustomer(Customer customer);

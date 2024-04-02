@@ -18,6 +18,9 @@ builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddAuthentication(); 
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -36,8 +39,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-//var logger = app.Services.GetRequiredService<ILoggerManager>();
-//app.ConfigureExceptionHandler(logger);
 app.UseExceptionHandler(opt => { });
 
 if (app.Environment.IsProduction())
@@ -61,6 +62,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 
 app.UseCors("CorsPolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

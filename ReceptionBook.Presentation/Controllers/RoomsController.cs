@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReceptionBook.Presentation.ModelBinders;
 using Service.Contracts;
@@ -8,6 +9,7 @@ using Shared.RequestFeatures;
 namespace ReceptionBook.Presentation.Controllers
 {
     [Route("api/rooms")]
+    //[Authorize(Roles = "Manager")]
     [ApiController]
     public class RoomsController : ControllerBase
     {
@@ -52,8 +54,8 @@ namespace ReceptionBook.Presentation.Controllers
             return Ok(rooms);
         }
         
-        [HttpGet("free")]
-        public async Task<IActionResult> GetFreeRooms([FromQuery] AvailableRoomParameters roomParameters)
+        [HttpGet("available")]
+        public async Task<IActionResult> GetAvailableRooms([FromQuery] AvailableRoomParameters roomParameters)
         {   
             var pagedResult = await _service.RoomService.GetAvailableRoomsAsync(roomParameters, trackChanges: false);
             
@@ -87,16 +89,6 @@ namespace ReceptionBook.Presentation.Controllers
             await _service.RoomService.UpdateRoomAsync(id, room, trackChanges: true);
             
             return NoContent();
-        }
-        
-        [HttpGet("{roomId}/reservations")]
-        public async Task<IActionResult> GetReservationsForRoom(Guid roomId, [FromQuery] ReservationParameters reservationParameters)
-        {
-            var pagedResult = await _service.ReservationService.GetReservationsForRoomAsync(roomId, reservationParameters, trackChanges: false);
-        
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
-            
-            return Ok(pagedResult.reservations);
         }
     }
 }

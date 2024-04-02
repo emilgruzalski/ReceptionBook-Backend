@@ -14,6 +14,4 @@ public abstract record RoomForManipulationDto
     
     [Range(0, (double)decimal.MaxValue, ErrorMessage = "Price is required and it can't be lower than 0")]
     public decimal Price { get; init; }
-    
-    public IEnumerable<MaintenanceForCreationDto> Maintenances { get; init; }
 }
