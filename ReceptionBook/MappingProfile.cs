@@ -42,7 +42,8 @@ namespace ReceptionBook
             CreateMap<Customer, CustomerWithDetalisDto>()
                 .ForSourceMember(c => c.Reservations, opt => opt.DoNotValidate());
 
-            CreateMap<UserForRegistrationDto, User>();
+            CreateMap<UserForRegistrationDto, User>()
+                .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));;
 
             CreateMap<User, UserDto>();
 
