@@ -62,11 +62,9 @@ namespace Repository
         public async Task<PagedList<Room>> GetAvailableRoomsAsync(Guid reservationId, AvailableRoomParameters roomParameters, bool trackChanges)
         {
             var rooms = await FindByCondition(r =>
-                // Pokoje, które nie mają konfliktów rezerwacji, poza możliwą rezerwacją o podanym `reservationId`.
                 !r.Reservations.Any(res => res.StartDate < roomParameters.EndDate &&
                                            res.EndDate > roomParameters.StartDate &&
                                            !res.Id.Equals(reservationId)) ||
-                // Dodatkowo, jeśli jest rezerwacja z `reservationId`, to musi nie mieć konfliktów datowych.
                 (r.Reservations.Any(res => res.Id.Equals(reservationId))),
                 trackChanges)
                 .FilterRooms(roomParameters.Type)
