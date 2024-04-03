@@ -29,12 +29,8 @@ namespace Service
             _userManager = userManager;
             _configuration = configuration;
         }
+        
         public Task DeleteUserAsync(Guid userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<UserDto> GetUserWithDetailsAsync(Guid roomId, bool trackChanges)
         {
             throw new NotImplementedException();
         }
