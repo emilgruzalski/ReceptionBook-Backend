@@ -49,5 +49,13 @@ namespace Repository
                 .ToListAsync();
         
         public void DeleteCustomer(Customer customer) => Delete(customer);
+
+        public Task<bool> CustomerEmailExistsAsync(string customerEmail) =>
+            FindByCondition(c => c.Email.Equals(customerEmail), false)
+                .AnyAsync();
+
+        public Task<bool> CustomerEmailExistsAsync(Guid id, string customerEmail) =>
+            FindByCondition(c => c.Email.Equals(customerEmail) && !c.Id.Equals(id), false)
+                .AnyAsync();
     }
 }

@@ -16,12 +16,12 @@ namespace Repository.Configuration
                 new User
                 {
                     Id = "b778396b-8016-492a-8f38-4188eaca1e1e",
-                    FirstName = "Admin",
-                    LastName = "Admin",
-                    UserName = "admin",
-                    NormalizedUserName = "ADMIN",
-                    Email = "admin@receptionbook.com",
-                    PasswordHash = hasher.HashPassword(null, "Admin123"),
+                    FirstName = "Emil",
+                    LastName = "Grużalski",
+                    UserName = "emil.gruzalski@gmail.com",
+                    NormalizedUserName = "EMIL.GRUZALSKI@GMAIL.COM",
+                    Email = "emil.gruzalski@gmail.com",
+                    PasswordHash = hasher.HashPassword(null, "Admin12345"),
                 }
             );
         }

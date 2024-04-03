@@ -40,6 +40,11 @@ namespace Service
         
         public async Task<CustomerDto> CreateCustomerAsync(CustomerForCreationDto customer)
         {
+            var result = await _repository.Customer.CustomerEmailExistsAsync(customer.Email);
+
+            if (result)
+                throw new CustomerEmailExistsException(customer.Email);
+
             var customerEntity = _mapper.Map<Customer>(customer);
             
             _repository.Customer.CreateCustomer(customerEntity);
@@ -68,6 +73,13 @@ namespace Service
         {
             if (customerCollection is null)
                 throw new CustomerCollectionBadRequest();
+
+            foreach (var customer in customerCollection)
+            {
+                var result = await _repository.Customer.CustomerEmailExistsAsync(customer.Email);
+                if (result)
+                    throw new CustomerEmailExistsException(customer.Email);
+            }
             
             var customersEntities = _mapper.Map<IEnumerable<Customer>>(customerCollection);
             foreach (var customer in customersEntities)
@@ -95,6 +107,11 @@ namespace Service
 
         public async Task UpdateCustomerAsync(Guid customerId, CustomerForUpdateDto customer, bool trackChanges)
         {
+            var result = await _repository.Customer.CustomerEmailExistsAsync(customerId, customer.Email);
+
+            if (result)
+                throw new CustomerEmailExistsException(customer.Email);
+
             var customerEntity = await _repository.Customer.GetCustomerWithDetailsAsync(customerId, trackChanges);
             if (customerEntity is null)
                 throw new CustomerNotFoundException(customerId);

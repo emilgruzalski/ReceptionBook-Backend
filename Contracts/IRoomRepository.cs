@@ -15,6 +15,9 @@ namespace Contracts
         void CreateRoom(Room room);
         Task<IEnumerable<Room>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
         Task<PagedList<Room>> GetAvailableRoomsAsync(AvailableRoomParameters roomParameters, bool trackChanges);
+        Task<PagedList<Room>> GetAvailableRoomsAsync(Guid reservationId, AvailableRoomParameters roomParameters, bool trackChanges);
         void DeleteRoom(Room room);
+        Task<bool> RoomNumberExistsAsync(string roomNumber);
+        Task<bool> RoomNumberExistsAsync(Guid id, string roomNumber);
     }
 }

@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Shared.DataTransferObjects
 {
-    public record UserForUpdateDto
+    public class UserDto
     {
-        [Required(ErrorMessage = "Email is required.")]
-        public string? Email { get; init; }
-        public string? FirstName { get; init; }
-        public string? LastName { get; init; }
-        public string? Role { get; init; }
+        public Guid Id { get; set; }
+        public string? Email { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public ICollection<string>? Roles { get; set; }
     }
 }

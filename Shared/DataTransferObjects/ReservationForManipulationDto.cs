@@ -9,10 +9,6 @@ public abstract record ReservationForManipulationDto : IValidatableObject
     
     [Required(ErrorMessage = "Reservation end date is a required field")]
     public DateOnly EndDate { get; init; }
-
-    [Required(ErrorMessage = "Reservation status is a required field")]
-    [MaxLength(20, ErrorMessage = "Maximum length for the Status is 20 characters.")]
-    public string Status { get; init; }
     
     [Range(0, (double)decimal.MaxValue, ErrorMessage = "Total price is required and it can't be lower than 0")]
     public Decimal TotalPrice { get; init; }

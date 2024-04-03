@@ -9,10 +9,10 @@ namespace Shared.DataTransferObjects
 {
     public record UserForUpdateDto
     {
-        [Required(ErrorMessage = "Email is required")]
-        public string Email { get; init; }
+        [Required(ErrorMessage = "User email is a required field")]
+        public string? Email { get; init; }
         public string? FirstName { get; init; }
         public string? LastName { get; init; }
-        public string? Role { get; init; }
+        public ICollection<string>? Roles { get; init; }
     }
 }

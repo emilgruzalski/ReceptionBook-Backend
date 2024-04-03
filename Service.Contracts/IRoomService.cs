@@ -10,6 +10,7 @@ namespace Service.Contracts
         Task<RoomDto> CreateRoomAsync(RoomForCreationDto room);
         Task<IEnumerable<RoomDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
         Task<(IEnumerable<RoomDto> rooms, MetaData metaData)> GetAvailableRoomsAsync(AvailableRoomParameters roomParameters, bool trackChanges);
+        Task<(IEnumerable<RoomDto> rooms, MetaData metaData)> GetAvailableRoomsAsync(Guid reservationID, AvailableRoomParameters roomParameters, bool trackChanges);
         Task<(IEnumerable<RoomDto> rooms, string ids)> CreateRoomCollectionAsync(IEnumerable<RoomForCreationDto> roomCollection);
         Task DeleteRoomAsync(Guid roomId, bool trackChanges);
         Task UpdateRoomAsync(Guid roomId, RoomForUpdateDto room, bool trackChanges);

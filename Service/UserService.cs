@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Contracts;
+using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -18,33 +19,65 @@ namespace Service
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
-        private readonly IConfiguration _configuration;
+        //private readonly IConfiguration _configuration;
 
         private User? _user;
 
-        public UserService(ILoggerManager logger, IMapper mapper, UserManager<User> userManager, IConfiguration configuration)
+        public UserService(ILoggerManager logger, IMapper mapper, UserManager<User> userManager)//, IConfiguration configuration)
         {
             _logger = logger;
             _mapper = mapper;
             _userManager = userManager;
-            _configuration = configuration;
+            //_configuration = configuration;
         }
         
-        public Task DeleteUserAsync(Guid userId)
+        public async Task DeleteUserAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            await _userManager.DeleteAsync(user);
         }
 
-        public Task<IEnumerable<UserDto>> GetUsersAsync(bool trackChanges)
+        public Task<IEnumerable<UserDto>> GetUsersAsync()
         {
             var users = _userManager.Users;
 
-            return Task.FromResult(_mapper.Map<IEnumerable<UserDto>>(users));
+            var usersDto = _mapper.Map<IEnumerable<UserDto>>(users);
+
+            return Task.FromResult(usersDto);
         }
 
-        public Task UpdateUserAsync(Guid userId, UserForUpdateDto user, bool trackChanges)
+        public async Task<UserDto> GetUserByIdAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            var userDto = _mapper.Map<UserDto>(user);
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            userDto.Roles = roles;
+
+            return userDto;
+        }
+
+        public async Task UpdateUserAsync(Guid userId, UserForUpdateDto user)
+        {
+            var userEntity = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (userEntity is null)
+                throw new RoomNotFoundException(userId);
+
+            _mapper.Map(user, userEntity);
+
+            var roles = await _userManager.GetRolesAsync(userEntity);
+
+            await _userManager.RemoveFromRolesAsync(userEntity, roles);
+
+            List<string> RolesToBeAssigned = user.Roles.ToList();
+
+            await _userManager.AddToRolesAsync(userEntity, user.Roles);
+
+            await _userManager.UpdateAsync(userEntity);
         }
     }
 }

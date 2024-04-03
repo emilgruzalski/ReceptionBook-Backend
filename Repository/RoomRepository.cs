@@ -59,11 +59,52 @@ namespace Repository
             return new PagedList<Room>(rooms, count, roomParameters.PageNumber, roomParameters.PageSize);
         }
 
+        public async Task<PagedList<Room>> GetAvailableRoomsAsync(Guid reservationId, AvailableRoomParameters roomParameters, bool trackChanges)
+        {
+            var rooms = await FindByCondition(r =>
+                // Pokoje, które nie mają konfliktów rezerwacji, poza możliwą rezerwacją o podanym `reservationId`.
+                !r.Reservations.Any(res => res.StartDate < roomParameters.EndDate &&
+                                           res.EndDate > roomParameters.StartDate &&
+                                           !res.Id.Equals(reservationId)) ||
+                // Dodatkowo, jeśli jest rezerwacja z `reservationId`, to musi nie mieć konfliktów datowych.
+                (r.Reservations.Any(res => res.Id.Equals(reservationId))),
+                trackChanges)
+                .FilterRooms(roomParameters.Type)
+                .Search(roomParameters.SearchTerm)
+                .Sort(roomParameters.OrderBy)
+                .Skip((roomParameters.PageNumber - 1) * roomParameters.PageSize)
+                .Take(roomParameters.PageSize)
+                .ToListAsync();
+
+            var count = await FindByCondition(r =>
+                !r.Reservations.Any(res => res.StartDate < roomParameters.EndDate &&
+                                           res.EndDate > roomParameters.StartDate &&
+                                           !res.Id.Equals(reservationId)) ||
+                (r.Reservations.Any(res => res.Id.Equals(reservationId)) &&
+                 !r.Reservations.Any(res => !res.Id.Equals(reservationId) &&
+                                           res.StartDate < roomParameters.EndDate &&
+                                           res.EndDate > roomParameters.StartDate)),
+                trackChanges)
+                .FilterRooms(roomParameters.Type)
+                .Search(roomParameters.SearchTerm)
+                .CountAsync();
+
+            return new PagedList<Room>(rooms, count, roomParameters.PageNumber, roomParameters.PageSize);
+        }
+
+
+
         public async Task<Room> GetRoomWithDetailsAsync(Guid roomId, bool trackChanges) =>
             await FindByCondition(r => r.Id.Equals(roomId), trackChanges)
                 .Include(r => r.Reservations)
                 .SingleOrDefaultAsync();
         
         public void DeleteRoom(Room room) => Delete(room);
+
+        public async Task<bool> RoomNumberExistsAsync(string roomNumber) =>
+            await FindByCondition(r => r.Number.Equals(roomNumber), false).AnyAsync();
+
+        public async Task<bool> RoomNumberExistsAsync(Guid id, string roomNumber) =>
+            await FindByCondition(r => r.Number.Equals(roomNumber) && !r.Id.Equals(id), false).AnyAsync();
     }
 }

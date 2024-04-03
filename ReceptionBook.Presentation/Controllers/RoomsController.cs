@@ -40,7 +40,10 @@ namespace ReceptionBook.Presentation.Controllers
         {
             if (room is null)
                 return BadRequest("RoomForCreationDto object is null");
-            
+
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
             var createdRoom = await _service.RoomService.CreateRoomAsync(room);
             
             return CreatedAtRoute("RoomById", new { id = createdRoom.Id }, createdRoom);
@@ -63,12 +66,23 @@ namespace ReceptionBook.Presentation.Controllers
             
             return Ok(pagedResult.rooms);
         }
+
+        [HttpGet("available/{id:guid}")]
+        public async Task<IActionResult> GetAvailableRoomsUpdate(Guid id, [FromQuery] AvailableRoomParameters roomParameters)
+        {
+            var pagedResult = await _service.RoomService.GetAvailableRoomsAsync(id, roomParameters, trackChanges: false);
+            
+            return Ok(pagedResult.rooms);
+        }
         
         [HttpPost("collection")]
         public async Task<IActionResult> CreateRoomCollection([FromBody] IEnumerable<RoomForCreationDto> roomCollection)
         {
             var result = await _service.RoomService.CreateRoomCollectionAsync(roomCollection);
-            
+
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
             return CreatedAtRoute("RoomCollection", new { result.ids }, result.rooms);
         }
         
@@ -85,7 +99,10 @@ namespace ReceptionBook.Presentation.Controllers
         {
             if (room is null)
                 return BadRequest("RoomForUpdateDto object is null");
-            
+
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
             await _service.RoomService.UpdateRoomAsync(id, room, trackChanges: true);
             
             return NoContent();

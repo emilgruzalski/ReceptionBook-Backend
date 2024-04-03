@@ -10,8 +10,9 @@ namespace Service.Contracts
 {
     public interface IUserService
     {
-        Task<IEnumerable<UserDto>> GetUsersAsync(bool trackChanges);
-        Task UpdateUserAsync(Guid userId, UserForUpdateDto user, bool trackChanges);
+        Task<IEnumerable<UserDto>> GetUsersAsync();
+        Task<UserDto> GetUserByIdAsync(Guid userId);
+        Task UpdateUserAsync(Guid userId, UserForUpdateDto user);
         Task DeleteUserAsync(Guid userId);
     }
 }

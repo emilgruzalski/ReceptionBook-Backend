@@ -41,6 +41,11 @@ namespace Service
         
         public async Task<RoomDto> CreateRoomAsync(RoomForCreationDto room)
         {
+            var result = await _repository.Room.RoomNumberExistsAsync(room.Number);
+
+            if (result)
+                throw new RoomNumberExistsException(room.Number);
+
             var roomEntity = _mapper.Map<Room>(room);
             
             _repository.Room.CreateRoom(roomEntity);
@@ -76,10 +81,28 @@ namespace Service
             return (rooms: roomsDto, metaData: roomsWithMetaData.MetaData);
         }
 
+        public async Task<(IEnumerable<RoomDto> rooms, MetaData metaData)> GetAvailableRoomsAsync(Guid reservationId, AvailableRoomParameters roomParameters, bool trackChanges)
+        {
+            if (!roomParameters.ValidDateRange)
+                throw new EndDateRangeBadRequestException();
+
+            var roomsWithMetaData = await _repository.Room.GetAvailableRoomsAsync(reservationId, roomParameters, trackChanges);
+            var roomsDto = _mapper.Map<IEnumerable<RoomDto>>(roomsWithMetaData);
+
+            return (rooms: roomsDto, metaData: roomsWithMetaData.MetaData);
+        }
+
         public async Task<(IEnumerable<RoomDto> rooms, string ids)> CreateRoomCollectionAsync(IEnumerable<RoomForCreationDto> roomCollection)
         {
             if (roomCollection is null)
                 throw new RoomCollectionBadRequestException();
+
+            foreach (var room in roomCollection)
+            {
+                var result = await _repository.Room.RoomNumberExistsAsync(room.Number);
+                if (result)
+                    throw new RoomNumberExistsException(room.Number);
+            }
 
             var roomEntities = _mapper.Map<IEnumerable<Room>>(roomCollection);
             foreach (var room in roomEntities)
@@ -110,6 +133,10 @@ namespace Service
             var roomEntity = await _repository.Room.GetRoomWithDetailsAsync(id, trackChanges);
             if (roomEntity is null)
                 throw new RoomNotFoundException(id);
+
+            var result = await _repository.Room.RoomNumberExistsAsync(id, room.Number);
+            if (result)
+                throw new RoomNumberExistsException(room.Number);
             
             _mapper.Map(room, roomEntity);
             await _repository.SaveAsync();

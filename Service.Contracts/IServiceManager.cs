@@ -12,6 +12,6 @@ namespace Service.Contracts
         ICustomerService CustomerService { get; }
         IRoomService RoomService { get; }
         IAuthenticationService AuthenticationService { get; }
-        //IUserService UserService { get; }
+        IUserService UserService { get; }
     }
 }

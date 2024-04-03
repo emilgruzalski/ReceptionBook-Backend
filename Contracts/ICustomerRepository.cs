@@ -16,5 +16,7 @@ namespace Contracts
         void CreateCustomer(Customer customer);
         Task<IEnumerable<Customer>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
         void DeleteCustomer(Customer customer);
+        Task<bool> CustomerEmailExistsAsync(string customerEmail);
+        Task<bool> CustomerEmailExistsAsync(Guid id, string customerEmail);
     }
 }

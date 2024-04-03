@@ -39,15 +39,15 @@ namespace ReceptionBook
             
             CreateMap<CustomerForUpdateDto, Customer>();
 
-            CreateMap<Customer, CustomerWithDetalisDto>()
-                .ForSourceMember(c => c.Reservations, opt => opt.DoNotValidate());
+            CreateMap<Customer, CustomerWithDetalisDto>();
 
             CreateMap<UserForRegistrationDto, User>()
-                .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));;
+                .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));
 
             CreateMap<User, UserDto>();
 
-            CreateMap<UserForUpdateDto, User>();
+            CreateMap<UserForUpdateDto, User>()
+                .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));
         }
     }
 }
