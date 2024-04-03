@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace ReceptionBook.Presentation.Controllers
 {
     [Route("api/users")]
-    //[Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Administrator")]
     [ApiController]
     public class UserController : ControllerBase
     {

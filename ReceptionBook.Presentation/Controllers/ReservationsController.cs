@@ -8,7 +8,7 @@ using Shared.RequestFeatures;
 namespace ReceptionBook.Presentation.Controllers;
 
 [Route("api/reservations")]
-//[Authorize(Roles = "Manager")]
+[Authorize(Roles = "Administrator, Moderator")]
 [ApiController]
 public class ReservationsController : ControllerBase
 {

@@ -9,7 +9,7 @@ using Shared.RequestFeatures;
 namespace ReceptionBook.Presentation.Controllers
 {
     [Route("api/rooms")]
-    //[Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Administrator, Moderator")]
     [ApiController]
     public class RoomsController : ControllerBase
     {
@@ -83,7 +83,7 @@ namespace ReceptionBook.Presentation.Controllers
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
 
-            return CreatedAtRoute("RoomCollection", new { result.ids }, result.rooms);
+            return CreatedAtRoute("RoomsCollection", new { result.ids }, result.rooms);
         }
         
         [HttpDelete("{id:guid}")]

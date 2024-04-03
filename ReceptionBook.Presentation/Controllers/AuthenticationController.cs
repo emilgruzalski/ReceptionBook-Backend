@@ -24,12 +24,10 @@ namespace ReceptionBook.Presentation.Controllers
             var result = await _service.AuthenticationService.RegisterUser(userForRegistration); 
 
             if (!result.Succeeded) 
-            { 
-                foreach (var error in result.Errors) 
-                { 
-                    ModelState.TryAddModelError(error.Code, error.Description);
-                } 
-                return BadRequest(ModelState);
+            {
+                var errors = result.Errors.Select(e => e.Description);
+
+                return BadRequest(new RegistrationResponseDto { Errors = errors });
             } 
             return StatusCode(201); 
         }
@@ -38,10 +36,11 @@ namespace ReceptionBook.Presentation.Controllers
         public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto user) 
         { 
             if (!await _service.AuthenticationService.ValidateUser(user)) 
-                return Unauthorized(); 
+                return Unauthorized(new AuthResponseDto { ErrorMessage = "Invalid Authentication" }); 
 
-            return Ok(new { Token = await _service
-                .AuthenticationService.CreateToken() }); 
+            var token = await _service.AuthenticationService.CreateToken();
+
+            return Ok(new AuthResponseDto { IsAuthSuccessful = true, Token = token }); 
         }
     }
 }

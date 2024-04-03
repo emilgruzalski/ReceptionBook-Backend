@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repository;
@@ -11,9 +12,11 @@ using Repository;
 namespace ReceptionBook.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20240403212121_UpdateDatabase")]
+    partial class UpdateDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -299,17 +302,16 @@ namespace ReceptionBook.Migrations
                         {
                             Id = "b778396b-8016-492a-8f38-4188eaca1e1e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "820e2100-4194-4c29-add7-1062282ea2d0",
+                            ConcurrencyStamp = "82e9fa50-d56f-4b75-8528-a361ed0fcc85",
                             Email = "emil.gruzalski@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Emil",
                             LastName = "Grużalski",
                             LockoutEnabled = false,
-                            NormalizedEmail = "EMIL.GRUZALSKI@GMAIL.COM",
                             NormalizedUserName = "EMIL.GRUZALSKI@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEd0nIa6oNHC8HQEccb0wQk4VUoVikIc88+lhdaVWvrJ6f8uQyJKfpk8aUYE/ST8bQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAq2sArFZi/BwwEkX/aw47nD1PuysM/1yLFUCWcLV7QugQHiyosF7sxF57G1s6w3iA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c8d7d71e-5460-49e5-95b4-6efed1abc19c",
+                            SecurityStamp = "242f668a-ae3b-4381-a27b-c1080a490caf",
                             TwoFactorEnabled = false,
                             UserName = "emil.gruzalski@gmail.com"
                         });
