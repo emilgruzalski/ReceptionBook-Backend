@@ -21,7 +21,7 @@ namespace Repository.Configuration
                     FirstName = "Jana",
                     LastName = "McLeaf",
                     Email = "jana.mcleaf@gmail.com",
-                    PhoneNumber = "569-51-9770"
+                    PhoneNumber = "569519770"
                 },
                 new Customer
                 {
@@ -45,7 +45,7 @@ namespace Repository.Configuration
                     FirstName = "Tallia",
                     LastName = "Thomtson",
                     Email = "tthomtsonv@boston.com",
-                    PhoneNumber = "726-61-4409"
+                    PhoneNumber = "726614409"
                 },
                 new Customer
                 {
@@ -53,7 +53,7 @@ namespace Repository.Configuration
                     FirstName = "Kirk",
                     LastName = "Malia",
                     Email = "kmalia10@soundcloud.com",
-                    PhoneNumber = "753-55-8744"
+                    PhoneNumber = "753558744"
                 }
             );
         }
