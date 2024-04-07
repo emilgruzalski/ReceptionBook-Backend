@@ -73,9 +73,13 @@ namespace Service
 
             await _userManager.RemoveFromRolesAsync(userEntity, roles);
 
-            List<string> RolesToBeAssigned = user.Roles.ToList();
+            if (user.Roles is not null) 
+            {
+                List<string> RolesToBeAssigned = user.Roles.ToList();
 
-            await _userManager.AddToRolesAsync(userEntity, user.Roles);
+                if (RolesToBeAssigned.Count > 0)
+                    await _userManager.AddToRolesAsync(userEntity, RolesToBeAssigned);
+            }
 
             await _userManager.UpdateAsync(userEntity);
         }
