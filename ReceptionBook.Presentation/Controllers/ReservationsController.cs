@@ -34,7 +34,7 @@ public class ReservationsController : ControllerBase
         return Ok(reservation);
     }
 
-    [HttpPost("{id:guid}")]
+    [HttpPost]
     public async Task<IActionResult> CreateReservation([FromBody] ReservationForCreationDto reservation)
     {
         if (reservation is null)
