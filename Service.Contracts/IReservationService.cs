@@ -15,5 +15,6 @@ namespace Service.Contracts
         Task<ReservationDto> CreateReservationAsync(ReservationForCreationDto reservation);
         Task DeleteReservationAsync(Guid Id, bool trackChanges);
         Task UpdateReservationAsync(Guid Id, ReservationForUpdateDto reservation, bool trackChanges);
+        Task<IEnumerable<RaportDto>> GetRaportsAsync(bool trackChanges);
     }
 }

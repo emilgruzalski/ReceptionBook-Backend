@@ -14,5 +14,6 @@ namespace Contracts
         Task<Reservation> GetReservationWithDetailsAsync(Guid reservationId, bool trackChanges);
         void CreateReservation(Reservation reservation);
         void DeleteReservation(Reservation reservation);
+        Task<IEnumerable<Reservation>> GetAllReservationsForRaportAsync(bool trackChanges);
     }
 }

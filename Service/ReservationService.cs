@@ -90,5 +90,22 @@ namespace Service
             _mapper.Map(reservation, reservationEntity);
             await _repository.SaveAsync();
         }
+
+        public async Task<IEnumerable<RaportDto>> GetRaportsAsync(bool trackChanges) 
+        {
+            var reservations = await _repository.Reservation.GetAllReservationsForRaportAsync(trackChanges);
+
+            // Group the reservations in such a way that the start date of the reservation determines to which month and year a given reservation belongs.
+            var groupedReservations = reservations.GroupBy(r => new { r.StartDate.Year, r.StartDate.Month });
+            // For each group, calculate the total price of all reservations in the group.
+            var raports = groupedReservations.Select(g => new RaportDto
+            {
+                Year = g.Key.Year.ToString(),
+                Month = g.Key.Month.ToString(),
+                TotalPrice = g.Sum(r => r.TotalPrice)
+            });
+
+            return raports;
+        }
     }
 }

@@ -44,5 +44,9 @@ namespace Repository
         public void CreateReservation(Reservation reservation) => Create(reservation);
         
         public void DeleteReservation(Reservation reservation) => Delete(reservation);
+
+        public async Task<IEnumerable<Reservation>> GetAllReservationsForRaportAsync(bool trackChanges) =>
+            await FindByCondition(r => r.Status != "Cancelled", trackChanges)
+                .ToListAsync();
     }
 }

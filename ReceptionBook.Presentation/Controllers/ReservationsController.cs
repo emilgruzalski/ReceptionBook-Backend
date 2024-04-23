@@ -69,4 +69,12 @@ public class ReservationsController : ControllerBase
         
         return NoContent();
     }
+
+    [HttpGet("raports")]
+    public async Task<IActionResult> GetRaports()
+    {
+        var reservations = await _service.ReservationService.GetRaportsAsync(trackChanges: false);
+
+        return Ok(reservations);
+    }
 }
