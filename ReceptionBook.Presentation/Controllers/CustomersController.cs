@@ -9,7 +9,7 @@ using Shared.RequestFeatures;
 namespace ReceptionBook.Presentation.Controllers;
 
 [Route("api/customers")]
-[Authorize(Roles = "Administrator, Manager")]
+//[Authorize(Roles = "Administrator, Manager")]
 [ApiController]
 public class CustomersController : ControllerBase
 {

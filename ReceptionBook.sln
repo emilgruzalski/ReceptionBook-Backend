@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceptionBook.Presentation"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{B8FEF864-1C52-429B-92A1-A0C6D6B715E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService", "EmailService\EmailService.csproj", "{B8F95E05-E181-4434-958A-9CBD2642188C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailService", "EmailService\EmailService.csproj", "{B8F95E05-E181-4434-958A-9CBD2642188C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

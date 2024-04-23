@@ -13,6 +13,9 @@ public abstract record ReservationForManipulationDto : IValidatableObject
     [Range(0, (double)decimal.MaxValue, ErrorMessage = "Total price is required and it can't be lower than 0")]
     public Decimal TotalPrice { get; init; }
 
+    [Required(ErrorMessage = "Reservation status is a required field")]
+    public string Status { get; init; }
+
     [Required(ErrorMessage = "Reservation customer id is a required field")]
     public Guid CustomerId { get; init; }
     

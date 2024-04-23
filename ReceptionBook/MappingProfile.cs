@@ -22,6 +22,7 @@ namespace ReceptionBook
                     r.StartDate,
                     r.EndDate,
                     r.TotalPrice,
+                    r.Status,
                     $"{r.Customer.FirstName} {r.Customer.LastName}",
                     r.Room.Number));
 

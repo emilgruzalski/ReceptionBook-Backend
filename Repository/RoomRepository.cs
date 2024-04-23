@@ -42,7 +42,7 @@ namespace Repository
         public async Task<PagedList<Room>> GetAvailableRoomsAsync(AvailableRoomParameters roomParameters, bool trackChanges)
         {
             var rooms = await FindByCondition(r => !r.Reservations.Any(res => res.StartDate <= roomParameters.EndDate && 
-                    res.EndDate >= roomParameters.StartDate), trackChanges)
+                    res.EndDate >= roomParameters.StartDate && res.Status != "Cancelled"), trackChanges)
                     .FilterRooms(roomParameters.Type)
                     .Search(roomParameters.SearchTerm)
                     .Sort(roomParameters.OrderBy)
@@ -64,7 +64,8 @@ namespace Repository
             var rooms = await FindByCondition(r =>
                 !r.Reservations.Any(res => res.StartDate < roomParameters.EndDate &&
                                            res.EndDate > roomParameters.StartDate &&
-                                           !res.Id.Equals(reservationId)) ||
+                                           res.Status != "Cancelled" &&
+                                           !res.Id.Equals(reservationId )) ||
                 (r.Reservations.Any(res => res.Id.Equals(reservationId))),
                 trackChanges)
                 .FilterRooms(roomParameters.Type)
