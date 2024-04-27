@@ -2,8 +2,8 @@
 
 public class RoomIsReservedException : BadRequestException
 {
-    public RoomIsReservedException(Guid roomId)
-        : base($"Room with id {roomId} is reserved for the selected period.")
+    public RoomIsReservedException(string roomId)
+        : base($"Room with number {roomId} is reserved for the selected period.")
     {
     }
 }

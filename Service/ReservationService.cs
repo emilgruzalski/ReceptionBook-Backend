@@ -45,7 +45,7 @@ namespace Service
                 throw new RoomNotFoundException(reservation.RoomId);
             
             if (room.Reservations.Any(r => r.StartDate <= reservation.EndDate && r.EndDate >= reservation.StartDate && r.Status != "Cancelled"))
-                throw new RoomIsReservedException(reservation.RoomId);
+                throw new RoomIsReservedException(room.Number);
             
             var customer = await _repository.Customer.GetCustomerWithDetailsAsync(reservation.CustomerId, false);
             if (customer is null)
@@ -85,7 +85,7 @@ namespace Service
                 throw new RoomNotFoundException(reservation.RoomId);
 
                 if (room.Reservations.Any(r => r.StartDate <= reservation.EndDate && r.EndDate >= reservation.StartDate && r.Id != reservationId && r.Status != "Cancelled"))
-                    throw new RoomIsReservedException(reservation.RoomId);
+                    throw new RoomIsReservedException(room.Number);
             
             _mapper.Map(reservation, reservationEntity);
             await _repository.SaveAsync();
